@@ -41,7 +41,7 @@
             font-family: 'Inter', sans-serif; /* Set font utama ke Inter */
             margin: 0;
             padding: 0 15px 30px; /* Padding-bottom 30px untuk ruang di bawah */
-            box-sizing: border;
+            box-sizing: border-box; /* Pastikan padding dan border termasuk dalam lebar/tinggi */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -50,6 +50,7 @@
             background-color: var(--body-bg);
             color: var(--text-color-light);
             transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden; /* Mencegah scroll horizontal yang tidak diinginkan */
         }
 
         .container {
@@ -221,7 +222,6 @@
         /* Menjadikan teks di dalam mode toggle TIDAK tebal */
         .mode-toggle span {
             font-weight: normal; /* Mengubah kembali ke ketebalan normal/default */
-            /* Anda bisa juga menggunakan font-weight: 400; jika Inter Regular memiliki bobot 400 */
         }
 
         .mode-toggle:hover {
@@ -288,14 +288,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>Kalkulator Hambatan Konduktor v6</h1>
+        <h1>Kalkulator Hambatan Konduktor v7</h1>
         <hr> <div class="button-grid">
             <a href="https://www.iec.ch/" class="button button-iec">
                 <img src="https://via.placeholder.com/64/2ecc71/ffffff?text=IEC" alt="IEC Logo" class="button-icon-png">
                 <span>IEC</span>
             </a>
             <a href="https://www.icea.org/" class="button button-icea">
-                <img src="icea.png" alt="ICEA Logo" class="button-icon-png">
+                <img src="https://via.placeholder.com/64/3498db/ffffff?text=ICEA" alt="ICEA Logo" class="button-icon-png">
                 <span>ICEA</span>
             </a>
             <a href="https://spln.co.id/" class="button button-spln">
