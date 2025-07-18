@@ -53,7 +53,7 @@
 
         h1 {
             color: var(--heading-color); /* Use variable */
-            margin-bottom: 30px; /* Increased margin to create more space below title */
+            margin-bottom: 30px; /* Space below title */
             font-size: 1.8em;
             transition: color 0.3s ease; /* Smooth transition for mode change */
         }
@@ -63,7 +63,7 @@
             border: none;
             border-top: 1px solid var(--hr-color); /* Use variable */
             width: 80%; /* Width of the line */
-            margin: 20px auto; /* Vertical margin for HR */
+            margin: 25px auto; /* Vertical margin for HR below title */
             transition: border-top-color 0.3s ease; /* Smooth transition for mode change */
         }
 
@@ -72,7 +72,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(144px, 1fr)); /* Responsive grid for 2 columns */
             gap: 15px; /* Spacing between buttons */
-            margin-bottom: 20px; /* Space before the home link/bottom HR */
+            margin-bottom: 30px; /* Increased space below button grid to separate from bottom actions */
             justify-content: center; /* Center the grid items within the grid container */
             align-items: center;
         }
@@ -127,7 +127,7 @@
 
         /* Footer Styling */
         footer {
-            margin-top: 15px; /* Adjusted space above the footer */
+            margin-top: 0; /* Footer's top margin controlled by HR's bottom margin */
             padding: 10px 0;
             color: var(--footer-text-color); /* Use variable */
             font-size: 0.9em;
@@ -142,8 +142,8 @@
             justify-content: center; /* Center the items */
             align-items: center;
             gap: 20px; /* Space between Home and Mode Toggle */
-            margin-top: 15px; /* Space above this section */
-            margin-bottom: 20px; /* Space below this section */
+            margin-top: 0; /* Top margin controlled by button-grid's bottom margin */
+            margin-bottom: 0; /* Reduced space below this section, to pull HR closer */
             width: 100%; /* Ensure it spans the width */
         }
 
@@ -216,32 +216,32 @@
         <h1>Kalkulator Hambatan Konduktor</h1>
         <hr> <!-- Garis di bawah judul -->
         <div class="button-grid">
-            <a href="#" class="button button-iec">
+            <a href="https://www.iec.ch/" class="button button-iec">
                 <i class="fas fa-bolt"></i> <span>IEC</span>
             </a>
-            <a href="#" class="button button-icea">
+            <a href="https://www.icea.org/" class="button button-icea">
                 <i class="fas fa-building"></i>
                 <span>ICEA</span>
             </a>
-            <a href="#" class="button button-spln">
+            <a href="https://spln.co.id/" class="button button-spln">
                 <i class="fas fa-globe-asia"></i>
                 <span>SPLN</span>
             </a>
-            <a href="#" class="button button-asnzs">
+            <a href="https://www.standards.org.au/" class="button button-asnzs">
                 <i class="fas fa-map-marked-alt"></i>
                 <span>AS/NZS</span>
             </a>
-            <a href="#" class="button button-lain1">
+            <a href="https://www.google.com" class="button button-lain1">
                 <i class="fas fa-cogs"></i>
                 <span>Lainnya 1</span>
             </a>
-            <a href="#" class="button button-lain2">
+            <a href="https://www.wikipedia.org/" class="button button-lain2">
                 <i class="fas fa-ellipsis-h"></i>
                 <span>Lainnya 2</span>
             </a>
         </div>
         <div class="bottom-actions">
-            <a href="#" class="home-link-below-buttons">
+            <a href="https://www.youtube.com/" class="home-link-below-buttons">
                 <i class="fas fa-home"></i> Home
             </a>
             <button id="modeToggle" class="mode-toggle" aria-label="Toggle dark and light mode">
@@ -249,7 +249,7 @@
             </button>
         </div>
     </div>
-    <hr> <!-- Garis di atas footer -->
+    <hr style="margin: 2px auto;"> <!-- Garis di atas footer, disesuaikan agar lebih dekat -->
     <footer>
         Made by Williyanto Adi 2025
     </footer>
