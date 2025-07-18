@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standar Kabel - Mobile View</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column; /* Changed to column to stack main content and footer */
+            justify-content: space-between; /* Space between container and footer */
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5; /* Light gray background */
+            color: #ffffff; /* White text */
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px; /* Max width for mobile view, ideal for devices like Samsung A24 */
+        }
+
+        h1 {
+            color: #2c3e50; /* Dark blue-gray for heading */
+            margin-bottom: 15px; /* Reduced margin to make space for HR */
+            font-size: 1.8em;
+        }
+
+        /* Horizontal Rule (HR) Styling */
+        hr {
+            border: none;
+            border-top: 1px solid #ddd; /* Light gray line */
+            width: 80%; /* Width of the line */
+            margin: 20px auto; /* Center the line and add vertical spacing */
+        }
+
+        /* Button Grid Styling */
+        .button-grid {
+            display: grid;
+            /* Responsive grid for 2 columns, each at least 144px wide */
+            grid-template-columns: repeat(auto-fit, minmax(144px, 1fr));
+            gap: 15px; /* Spacing between buttons */
+            margin-bottom: 20px; /* Space before the bottom HR */
+            justify-content: center; /* Center the grid items within the grid container */
+            align-items: center;
+        }
+
+        .button {
+            display: flex;
+            flex-direction: column; /* Stack icon and text */
+            align-items: center;
+            justify-content: center;
+            /* Background color will be set by specific classes */
+            color: #ffffff; /* White text */
+            padding: 20px 15px;
+            border-radius: 12px; /* Rounded corners */
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            transition: all 0.3s ease; /* Smooth transitions for hover/active */
+            min-height: 100px; /* Ensure consistent button height */
+        }
+
+        .button i {
+            font-size: 2em; /* Icon size */
+            margin-bottom: 8px; /* Space between icon and text */
+        }
+
+        .button span {
+            display: block; /* Ensure text is on its own line */
+        }
+
+        /* Hover and Active Effects (will inherit text color) */
+        .button:hover {
+            opacity: 0.9;
+            transform: translateY(-3px); /* Slight lift effect */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .button:active {
+            opacity: 1;
+            transform: translateY(0); /* Press down effect */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Specific button colors */
+        .button-iec {
+            background-color: #2ecc71; /* Emerald green */
+        }
+
+        .button-icea {
+            background-color: #3498db; /* Bright blue */
+        }
+
+        .button-spln {
+            background-color: #e67e22; /* Carrot orange */
+        }
+
+        .button-asnzs {
+            background-color: #9b59b6; /* Amethyst purple */
+        }
+
+        .button-lain1 {
+            background-color: #f39c12; /* Sunflower yellow */
+        }
+
+        .button-lain2 {
+            background-color: #1abc9c; /* Turquoise */
+        }
+
+        /* Footer Styling */
+        footer {
+            margin-top: 20px; /* Space above the footer */
+            padding: 10px 0;
+            color: #7f8c8d; /* Darker gray for footer text */
+            font-size: 0.9em;
+            text-align: center;
+            width: 100%; /* Ensure footer spans full width */
+        }
+
+        /* Responsive adjustments for smaller screens if needed */
+        @media (max-width: 320px) {
+            .button-grid {
+                grid-template-columns: 1fr; /* Single column on very small screens */
+            }
+            .button {
+                font-size: 1em;
+                padding: 15px 10px;
+                min-height: 80px;
+            }
+            h1 {
+                font-size: 1.5em;
+            }
+            hr {
+                width: 90%; /* Adjust line width for very small screens */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pilih Standar Kabel</h1>
+        <hr> <!-- Garis di bawah judul -->
+        <div class="button-grid">
+            <a href="#" class="button button-iec">
+                <i class="fas fa-bolt"></i> <span>IEC</span>
+            </a>
+            <a href="#" class="button button-icea">
+                <i class="fas fa-building"></i>
+                <span>ICEA</span>
+            </a>
+            <a href="#" class="button button-spln">
+                <i class="fas fa-globe-asia"></i>
+                <span>SPLN</span>
+            </a>
+            <a href="#" class="button button-asnzs">
+                <i class="fas fa-map-marked-alt"></i>
+                <span>AS/NZS</span>
+            </a>
+            <a href="#" class="button button-lain1">
+                <i class="fas fa-cogs"></i>
+                <span>Lainnya 1</span>
+            </a>
+            <a href="#" class="button button-lain2">
+                <i class="fas fa-ellipsis-h"></i>
+                <span>Lainnya 2</span>
+            </a>
+        </div>
+    </div>
+    <hr> <!-- Garis di atas footer -->
+    <footer>
+        Made by Williyanto Adi 2025
+    </footer>
+</body>
+</html>
