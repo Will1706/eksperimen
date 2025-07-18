@@ -79,7 +79,7 @@
 
         .button {
             display: flex;
-            flex-direction: column; /* Stack icon and text */
+            flex-direction: column; /* Stack image and text */
             align-items: center;
             justify-content: center;
             /* Background color will be set by specific classes */
@@ -94,17 +94,41 @@
             min-height: 100px; /* Ensure consistent button height */
         }
 
-        .button i {
-            font-size: 2em; /* Icon size */
-            margin-bottom: 8px; /* Space between icon and text */
+        /* Enhanced CSS for the PNG icons */
+        .button .button-icon-png {
+            width: 64px; /* Ukuran gambar PNG */
+            height: 64px; /* Memastikan proporsi tetap 1:1 */
+            margin-bottom: 8px; /* Jarak antara gambar dan teks */
+            object-fit: contain; /* Memastikan gambar diskalakan dengan baik dalam wadahnya */
+            border-radius: 50%; /* Membuat ikon bulat */
+            /* Contoh Gradien (Anda bisa menyesuaikan warna) */
+            background: linear-gradient(135deg, #FFD700, #FFA500); /* Default: Emas ke Oranye */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25); /* Bayangan untuk kedalaman */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Transisi untuk efek hover */
         }
+
+        /* Hover effects for the PNG icons */
+        .button .button-icon-png:hover {
+            transform: scale(1.1); /* Membesar 10% saat di-hover */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* Bayangan lebih gelap dan menyebar */
+        }
+
+        /* Individual Gradients for each icon (optional, override default .button-icon-png background) */
+        /* HANYA GUNAKAN JIKA ANDA INGIN IKON ANDA MEMILIKI BACKGROUND GRADIENT YANG BERBEDA */
+        .button-iec .button-icon-png { background: linear-gradient(135deg, #2ecc71, #27ae60); } /* Hijau IEC */
+        .button-icea .button-icon-png { background: linear-gradient(135deg, #3498db, #2980b9); } /* Biru ICEA */
+        .button-spln .button-icon-png { background: linear-gradient(135deg, #e67e22, #d35400); } /* Oranye SPLN */
+        .button-asnzs .button-icon-png { background: linear-gradient(135deg, #9b59b6, #8e44ad); } /* Ungu AS/NZS */
+        .button-lain1 .button-icon-png { background: linear-gradient(135deg, #f39c12, #e67e22); } /* Kuning Lainnya 1 */
+        .button-lain2 .button-icon-png { background: linear-gradient(135deg, #1abc9c, #16a085); } /* Toska Lainnya 2 */
+
 
         .button span {
             display: block; /* Ensure text is on its own line */
             color: var(--text-color-light); /* Explicitly set button text color to the light text variable */
         }
 
-        /* Hover and Active Effects (will inherit text color) */
+        /* Hover and Active Effects for the main button container */
         .button:hover {
             opacity: 0.9;
             transform: translateY(-3px); /* Slight lift effect */
@@ -187,6 +211,11 @@
             background-color: rgba(255, 255, 255, 0.1); /* Darker hover for dark mode */
         }
 
+        /* New CSS for the HR above the footer */
+        .footer-hr {
+            margin: 2px auto;
+        }
+
         /* Responsive adjustments for smaller screens if needed */
         @media (max-width: 320px) {
             .button-grid {
@@ -213,30 +242,30 @@
 </head>
 <body>
     <div class="container">
-        <h1>Kalkulator Hambatan Konduktor ori</h1>
-        <hr> <!-- Garis di bawah judul -->
-        <div class="button-grid">
+        <h1>Kalkulator Hambatan Konduktor rev5</h1>
+        <hr> <div class="button-grid">
             <a href="https://www.iec.ch/" class="button button-iec">
-                <i class="fas fa-bolt"></i> <span>IEC</span>
+                <img src="iec.png" alt="IEC Logo" class="button-icon-png">
+                <span>IEC</span>
             </a>
             <a href="https://www.icea.org/" class="button button-icea">
-                <i class="fas fa-building"></i>
+                <img src="icea.png" alt="ICEA Logo" class="button-icon-png">
                 <span>ICEA</span>
             </a>
             <a href="https://spln.co.id/" class="button button-spln">
-                <i class="fas fa-globe-asia"></i>
+                <img src="spln.png" alt="SPLN Logo" class="button-icon-png">
                 <span>SPLN</span>
             </a>
             <a href="https://www.standards.org.au/" class="button button-asnzs">
-                <i class="fas fa-map-marked-alt"></i>
+                <img src="as.png" alt="AS/NZS Logo" class="button-icon-png">
                 <span>AS/NZS</span>
             </a>
             <a href="https://www.google.com" class="button button-lain1">
-                <i class="fas fa-cogs"></i>
+                <img src="spln.png" alt="Lainnya 1 Logo" class="button-icon-png">
                 <span>Lainnya 1</span>
             </a>
             <a href="https://www.wikipedia.org/" class="button button-lain2">
-                <i class="fas fa-ellipsis-h"></i>
+                <img src="iec.png" alt="Lainnya 2 Logo" class="button-icon-png">
                 <span>Lainnya 2</span>
             </a>
         </div>
@@ -249,8 +278,7 @@
             </button>
         </div>
     </div>
-    <hr style="margin: 2px auto;"> <!-- Garis di atas footer, disesuaikan agar lebih dekat -->
-    <footer>
+    <hr class="footer-hr"> <footer>
         Made by Williyanto Adi 2025
     </footer>
 
