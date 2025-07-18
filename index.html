@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Hambatan Konduktor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* Define CSS Variables for colors */
         :root {
@@ -12,6 +15,7 @@
             --text-color-light: #ffffff; /* Untuk teks tombol */
             --heading-color: #2c3e50;
             --hr-color: #ddd;
+            --bottom-text-color: #7f8c8d; /* Warna teks baru di bawah tombol */
             --button-link-color: #3498db; /* Untuk link home/mode toggle */
             --button-link-hover-color: #2980b9;
 
@@ -25,6 +29,7 @@
             --text-color-light: #ecf0f1; /* Teks terang untuk tombol */
             --heading-color: #ecf0f1;
             --hr-color: #555;
+            --bottom-text-color: #bdc3c7; /* Warna teks baru di dark mode */
             --button-link-color: #9b59b6;
             --button-link-hover-color: #8e44ad;
 
@@ -33,10 +38,10 @@
 
         /* General Styling */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif; /* Set font utama ke Inter */
             margin: 0;
-            padding: 0 15px 30px; /* Padding-bottom 30px tetap untuk ruang di bawah */
-            box-sizing: border-box;
+            padding: 0 15px 30px; /* Padding-bottom 30px untuk ruang di bawah */
+            box-sizing: border;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -56,7 +61,7 @@
 
         h1 {
             color: var(--heading-color);
-            margin-bottom: 15px; /* Mengurangi margin-bottom menjadi 15px */
+            margin-bottom: 15px;
             font-size: 1.8em;
             transition: color 0.3s ease;
         }
@@ -86,8 +91,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            /* Background color will be set by specific classes below */
-            color: var(--text-color-light); /* Teks untuk tombol */
+            color: var(--text-color-light);
             padding: 20px 15px;
             border-radius: 12px;
             text-decoration: none;
@@ -96,9 +100,9 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             min-height: 100px;
-            position: relative; /* Penting untuk pseudo-element */
-            overflow: hidden; /* Pastikan border animasi tidak keluar */
-            z-index: 1; /* Pastikan tombol di atas border */
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
         }
 
         /* Pseudo-element for animated border */
@@ -106,24 +110,24 @@
             content: '';
             position: absolute;
             bottom: 0;
-            left: 50%; /* Mulai dari tengah */
-            transform: translateX(-50%); /* Posisikan di tengah */
-            width: 0; /* Awalnya lebar 0 */
-            height: 4px; /* Ketebalan border */
-            background-color: var(--animated-border-color); /* Warna border animasi */
-            border-radius: 2px; /* Sedikit melengkung */
-            transition: width 0.3s ease-out; /* Animasi lebar */
-            z-index: -1; /* Di belakang konten tombol */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 4px;
+            background-color: var(--animated-border-color);
+            border-radius: 2px;
+            transition: width 0.3s ease-out;
+            z-index: -1;
         }
 
         .button:hover::before {
-            width: 100%; /* Memanjang hingga penuh saat di-hover */
+            width: 100%;
         }
 
         /* Hover & Active Effects for the main button container */
         .button:hover {
-            opacity: 0.95; /* Sedikit transparan */
-            transform: translateY(-2px); /* Sedikit angkat */
+            opacity: 0.95;
+            transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
@@ -139,25 +143,23 @@
             height: 64px;
             margin-bottom: 8px;
             object-fit: contain;
-            border-radius: 50%; /* Membuat ikon bulat */
-            background: linear-gradient(135deg, #FFD700, #FFA500); /* Default: Emas ke Oranye */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25); /* Bayangan untuk kedalaman */
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
 
         /* Hover effects for the PNG icons */
         .button .button-icon-png:hover {
-            transform: scale(1.1); /* Membesar 10% saat di-hover */
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* Bayangan lebih gelap dan menyebar */
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
         }
 
-        /* Individual Gradients for each icon (optional) */
+        /* Individual Gradients for each icon */
         .button-iec .button-icon-png { background: linear-gradient(135deg, #2ecc71, #27ae60); }
         .button-icea .button-icon-png { background: linear-gradient(135deg, #3498db, #2980b9); }
         .button-spln .button-icon-png { background: linear-gradient(135deg, #e67e22, #d35400); }
         .button-asnzs .button-icon-png { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
-        .button-lain1 .button-icon-png { background: linear-gradient(135deg, #f39c12, #e67e22); }
-        .button-lain2 .button-icon-png { background: linear-gradient(135deg, #1abc9c, #16a085); }
 
         .button span {
             display: block;
@@ -169,17 +171,6 @@
         .button-icea { background-color: #3498db; }
         .button-spln { background-color: #e67e22; }
         .button-asnzs { background-color: #9b59b6; }
-        .button-lain1 { background-color: #f39c12; }
-        .button-lain2 { background-color: #1abc9c; }
-
-        /* HR above bottom-actions - ini sekarang yang paling bawah */
-        .hr-after-bottom-actions {
-            margin: 20px auto 0; /* Memberi jarak di atas, tidak di bawah karena paling bawah */
-            border: none;
-            border-top: 1px solid var(--hr-color);
-            width: 80%;
-            transition: border-top-color 0.3s ease;
-        }
 
         /* Bottom Actions Wrapper (for Home and Mode Toggle) */
         .bottom-actions {
@@ -187,8 +178,8 @@
             justify-content: center;
             align-items: center;
             gap: 10px;
-            margin-top: 0; /* Jarak atas diatur oleh button-grid */
-            margin-bottom: 30px; /* Tambahkan margin bawah untuk ruang di atas garis jika ada */
+            margin-top: 20px; /* Jarak dari button-grid */
+            margin-bottom: 0; /* Hapus margin bawah karena teks akan langsung di bawahnya */
             width: 100%;
         }
 
@@ -200,7 +191,7 @@
             color: var(--button-link-color);
             text-decoration: none;
             font-size: 1em;
-            font-weight: bold;
+            font-weight: 600; /* Tetap tebal */
             transition: color 0.3s ease;
         }
 
@@ -222,6 +213,15 @@
             border-radius: 50%;
             color: var(--button-link-color);
             transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex; /* Gunakan flexbox untuk mensejajarkan ikon dan teks */
+            align-items: center; /* Pusatkan secara vertikal */
+            gap: 5px; /* Jarak antara ikon dan teks */
+        }
+
+        /* Menjadikan teks di dalam mode toggle TIDAK tebal */
+        .mode-toggle span {
+            font-weight: normal; /* Mengubah kembali ke ketebalan normal/default */
+            /* Anda bisa juga menggunakan font-weight: 400; jika Inter Regular memiliki bobot 400 */
         }
 
         .mode-toggle:hover {
@@ -230,6 +230,25 @@
 
         body.dark-mode .mode-toggle:hover {
             background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* New HR below bottom-actions */
+        .hr-below-bottom-actions {
+            border: none;
+            border-top: 1px solid var(--hr-color);
+            width: 80%;
+            margin: 20px auto 10px; /* Jarak 20px dari atas, 10px dari bawah */
+            transition: border-top-color 0.3s ease;
+        }
+
+        /* Text below bottom actions */
+        .below-actions-text {
+            margin-top: 10px; /* Jarak dari hr-below-bottom-actions */
+            color: var(--bottom-text-color); /* Menggunakan variabel warna baru */
+            font-size: 0.9em;
+            text-align: center;
+            width: 100%;
+            transition: color 0.3s ease;
         }
 
         /* Responsive adjustments for smaller screens if needed */
@@ -244,7 +263,7 @@
             }
             h1 {
                 font-size: 1.5em;
-                margin-bottom: 20px; /* Adjust margin for smaller screens */
+                margin-bottom: 20px;
             }
             hr {
                 width: 90%;
@@ -252,6 +271,17 @@
             .bottom-actions {
                 flex-direction: column;
                 gap: 10px;
+                margin-top: 15px;
+                margin-bottom: 0;
+            }
+            .hr-below-bottom-actions {
+                margin: 15px auto 8px; /* Sesuaikan margin di responsive */
+            }
+            .below-actions-text {
+                margin-top: 8px; /* Sesuaikan margin di responsive */
+            }
+            .mode-toggle {
+                font-size: 1em; /* Ukuran font lebih kecil untuk mode toggle di mobile */
             }
         }
     </style>
@@ -265,41 +295,46 @@
                 <span>IEC</span>
             </a>
             <a href="https://www.icea.org/" class="button button-icea">
-                <img src="https://via.placeholder.com/64/3498db/ffffff?text=ICEA" alt="ICEA Logo" class="button-icon-png">
+                <img src="icea.png" alt="ICEA Logo" class="button-icon-png">
                 <span>ICEA</span>
             </a>
             <a href="https://spln.co.id/" class="button button-spln">
-                <img src="spln.png" alt="SPLN Logo" class="button-icon-png">
+                <img src="https://via.placeholder.com/64/e67e22/ffffff?text=SPLN" alt="SPLN Logo" class="button-icon-png">
                 <span>SPLN</span>
             </a>
             <a href="https://www.standards.org.au/" class="button button-asnzs">
-                <img src="https://via.placeholder.com/64/9b59b6/ffffff?text=AS/NZS" alt="AS/NZS Logo" class="button-icon-png">
+                <img src="as.png" alt="AS/NZS Logo" class="button-icon-png">
                 <span>AS/NZS</span>
             </a>
-            <a href="https://www.google.com" class="button button-lain1">
-                <img src="https://via.placeholder.com/64/f39c12/ffffff?text=LAIN1" alt="Lainnya 1 Logo" class="button-icon-png">
-                <span>Lainnya 1</span>
-            </a>
-            <a href="https://www.wikipedia.org/" class="button button-lain2">
-                <img src="https://via.placeholder.com/64/1abc9c/ffffff?text=LAIN2" alt="Lainnya 2 Logo" class="button-icon-png">
-                <span>Lainnya 2</span>
-            </a>
         </div>
-        <hr class="hr-after-bottom-actions"> 
         <div class="bottom-actions">
             <a href="https://www.youtube.com/" class="home-link-below-buttons">
                 <i class="fas fa-home"></i> Home
             </a>
             <button id="modeToggle" class="mode-toggle" aria-label="Toggle dark and light mode">
-                <i class="fas fa-moon"></i>
+                <i class="fas fa-moon"></i> <span id="modeText">Terang</span>
             </button>
         </div>
+        <hr class="hr-below-bottom-actions"> <div class="below-actions-text">
+            Made by Williyanto Adi 2025
+        </div>
     </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const modeToggleBtn = document.getElementById('modeToggle');
             const body = document.body;
             const modeIcon = modeToggleBtn.querySelector('i');
+            const modeText = document.getElementById('modeText');
+
+            // Fungsi untuk memperbarui teks mode
+            function updateModeText(isDarkMode) {
+                if (isDarkMode) {
+                    modeText.textContent = 'Gelap';
+                } else {
+                    modeText.textContent = 'Terang';
+                }
+            }
 
             // Check for saved theme preference in localStorage
             const savedTheme = localStorage.getItem('theme');
@@ -307,11 +342,13 @@
                 body.classList.add('dark-mode');
                 modeIcon.classList.remove('fa-moon');
                 modeIcon.classList.add('fa-sun'); // Show sun icon for dark mode
+                updateModeText(true); // Perbarui teks menjadi "Gelap"
             } else {
                 // Default to light mode if no preference or preference is 'light'
                 body.classList.remove('dark-mode');
                 modeIcon.classList.remove('fa-sun');
                 modeIcon.classList.add('fa-moon'); // Show moon icon for light mode
+                updateModeText(false); // Perbarui teks menjadi "Terang"
             }
 
             modeToggleBtn.addEventListener('click', () => {
@@ -321,12 +358,14 @@
                     modeIcon.classList.remove('fa-sun');
                     modeIcon.classList.add('fa-moon');
                     localStorage.setItem('theme', 'light');
+                    updateModeText(false); // Perbarui teks menjadi "Terang"
                 } else {
                     // Switch to dark mode
                     body.classList.add('dark-mode');
                     modeIcon.classList.remove('fa-moon');
                     modeIcon.classList.add('fa-sun');
                     localStorage.setItem('theme', 'dark');
+                    updateModeText(true); // Perbarui teks menjadi "Gelap"
                 }
             });
         });
