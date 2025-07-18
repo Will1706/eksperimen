@@ -12,7 +12,6 @@
             --text-color-light: #ffffff; /* Untuk teks tombol */
             --heading-color: #2c3e50;
             --hr-color: #ddd;
-            --footer-text-color: #7f8c8d;
             --button-link-color: #3498db; /* Untuk link home/mode toggle */
             --button-link-hover-color: #2980b9;
 
@@ -26,7 +25,6 @@
             --text-color-light: #ecf0f1; /* Teks terang untuk tombol */
             --heading-color: #ecf0f1;
             --hr-color: #555;
-            --footer-text-color: #bdc3c7;
             --button-link-color: #9b59b6;
             --button-link-hover-color: #8e44ad;
 
@@ -58,7 +56,7 @@
 
         h1 {
             color: var(--heading-color);
-            margin-bottom: 30px;
+            margin-bottom: 15px; /* Mengurangi margin-bottom menjadi 15px */
             font-size: 1.8em;
             transition: color 0.3s ease;
         }
@@ -174,20 +172,9 @@
         .button-lain1 { background-color: #f39c12; }
         .button-lain2 { background-color: #1abc9c; }
 
-        /* Footer Styling */
-        footer {
-            margin-top: auto; /* Memastikan footer didorong ke bawah jika konten tidak penuh */
-            padding: 20px 0; /* Padding atas dan bawah untuk ruang */
-            color: var(--footer-text-color);
-            font-size: 0.9em;
-            text-align: center;
-            width: 100%;
-            transition: color 0.3s ease;
-        }
-
-        /* HR above footer */
-        .footer-hr {
-            margin: 10px auto; /* Mengurangi margin atas dan bawah menjadi 10px */
+        /* HR above bottom-actions - ini sekarang yang paling bawah */
+        .hr-after-bottom-actions {
+            margin: 20px auto 0; /* Memberi jarak di atas, tidak di bawah karena paling bawah */
             border: none;
             border-top: 1px solid var(--hr-color);
             width: 80%;
@@ -200,8 +187,8 @@
             justify-content: center;
             align-items: center;
             gap: 10px;
-            margin-top: 0;
-            margin-bottom: 10px; /* Mengurangi margin bawah menjadi 10px */
+            margin-top: 0; /* Jarak atas diatur oleh button-grid */
+            margin-bottom: 30px; /* Tambahkan margin bawah untuk ruang di atas garis jika ada */
             width: 100%;
         }
 
@@ -257,7 +244,7 @@
             }
             h1 {
                 font-size: 1.5em;
-                margin-bottom: 25px;
+                margin-bottom: 20px; /* Adjust margin for smaller screens */
             }
             hr {
                 width: 90%;
@@ -271,18 +258,18 @@
 </head>
 <body>
     <div class="container">
-        <h1>Kalkulator Hambatan Konduktor</h1>
+        <h1>Kalkulator Hambatan Konduktor v6</h1>
         <hr> <div class="button-grid">
             <a href="https://www.iec.ch/" class="button button-iec">
                 <img src="https://via.placeholder.com/64/2ecc71/ffffff?text=IEC" alt="IEC Logo" class="button-icon-png">
                 <span>IEC</span>
             </a>
             <a href="https://www.icea.org/" class="button button-icea">
-                <img src="icea.png" alt="ICEA Logo" class="button-icon-png">
+                <img src="https://via.placeholder.com/64/3498db/ffffff?text=ICEA" alt="ICEA Logo" class="button-icon-png">
                 <span>ICEA</span>
             </a>
             <a href="https://spln.co.id/" class="button button-spln">
-                <img src="https://via.placeholder.com/64/e67e22/ffffff?text=SPLN" alt="SPLN Logo" class="button-icon-png">
+                <img src="spln.png" alt="SPLN Logo" class="button-icon-png">
                 <span>SPLN</span>
             </a>
             <a href="https://www.standards.org.au/" class="button button-asnzs">
@@ -298,7 +285,8 @@
                 <span>Lainnya 2</span>
             </a>
         </div>
-        <hr class="footer-hr"> <div class="bottom-actions">
+        <hr class="hr-after-bottom-actions"> 
+        <div class="bottom-actions">
             <a href="https://www.youtube.com/" class="home-link-below-buttons">
                 <i class="fas fa-home"></i> Home
             </a>
@@ -307,10 +295,6 @@
             </button>
         </div>
     </div>
-    <footer>
-        Made by Williyanto Adi 2025
-    </footer>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const modeToggleBtn = document.getElementById('modeToggle');
