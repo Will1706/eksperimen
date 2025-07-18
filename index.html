@@ -6,6 +6,28 @@
     <title>Kalkulator Hambatan Konduktor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* Define CSS Variables for colors */
+        :root {
+            --body-bg: #f0f2f5;
+            --text-color-light: #ffffff; /* For button text */
+            --heading-color: #2c3e50;
+            --hr-color: #ddd;
+            --footer-text-color: #7f8c8d;
+            --button-link-color: #3498db; /* For home/mode toggle links */
+            --button-link-hover-color: #2980b9;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            --body-bg: #2c3e50; /* Dark background */
+            --text-color-light: #ecf0f1; /* Light text for buttons */
+            --heading-color: #ecf0f1; /* Light heading */
+            --hr-color: #555; /* Darker HR */
+            --footer-text-color: #bdc3c7; /* Lighter footer text */
+            --button-link-color: #9b59b6; /* Purple for links in dark mode */
+            --button-link-hover-color: #8e44ad;
+        }
+
         /* General Styling */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -17,8 +39,9 @@
             justify-content: space-between; /* Space between container and footer */
             align-items: center; /* Centers items horizontally in a column flex container */
             min-height: 100vh;
-            background-color: #f0f2f5; /* Light gray background */
-            color: #ffffff; /* White text */
+            background-color: var(--body-bg); /* Use variable */
+            color: var(--text-color-light); /* Use variable (for default text, though buttons override) */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for mode change */
         }
 
         .container {
@@ -26,21 +49,22 @@
             padding: 20px 0; /* Removed horizontal padding from container, now handled by body */
             width: 100%; /* Take full width within the body's padding */
             max-width: 400px; /* Max width for mobile view */
-            /* Removed flex properties from container to allow button-grid to manage its own layout */
         }
 
         h1 {
-            color: #2c3e50; /* Dark blue-gray for heading */
+            color: var(--heading-color); /* Use variable */
             margin-bottom: 30px; /* Increased margin to create more space below title */
             font-size: 1.8em;
+            transition: color 0.3s ease; /* Smooth transition for mode change */
         }
 
         /* Horizontal Rule (HR) Styling */
         hr {
             border: none;
-            border-top: 1px solid #ddd; /* Light gray line */
+            border-top: 1px solid var(--hr-color); /* Use variable */
             width: 80%; /* Width of the line */
             margin: 20px auto; /* Vertical margin for HR */
+            transition: border-top-color 0.3s ease; /* Smooth transition for mode change */
         }
 
         /* Button Grid Styling */
@@ -59,7 +83,7 @@
             align-items: center;
             justify-content: center;
             /* Background color will be set by specific classes */
-            color: #ffffff; /* White text */
+            color: var(--text-color-light); /* Use variable for button text color */
             padding: 20px 15px;
             border-radius: 12px; /* Rounded corners */
             text-decoration: none;
@@ -77,6 +101,7 @@
 
         .button span {
             display: block; /* Ensure text is on its own line */
+            color: var(--text-color-light); /* Explicitly set button text color to the light text variable */
         }
 
         /* Hover and Active Effects (will inherit text color) */
@@ -92,61 +117,74 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
-        /* Specific button colors */
-        .button-iec {
-            background-color: #2ecc71; /* Emerald green */
-        }
-
-        .button-icea {
-            background-color: #3498db; /* Bright blue */
-        }
-
-        .button-spln {
-            background-color: #e67e22; /* Carrot orange */
-        }
-
-        .button-asnzs {
-            background-color: #9b59b6; /* Amethyst purple */
-        }
-
-        .button-lain1 {
-            background-color: #f39c12; /* Sunflower yellow */
-        }
-
-        .button-lain2 {
-            background-color: #1abc9c; /* Turquoise */
-        }
+        /* Specific button colors (these remain fixed regardless of mode) */
+        .button-iec { background-color: #2ecc71; } /* Emerald green */
+        .button-icea { background-color: #3498db; } /* Bright blue */
+        .button-spln { background-color: #e67e22; } /* Carrot orange */
+        .button-asnzs { background-color: #9b59b6; } /* Amethyst purple */
+        .button-lain1 { background-color: #f39c12; } /* Sunflower yellow */
+        .button-lain2 { background-color: #1abc9c; } /* Turquoise */
 
         /* Footer Styling */
         footer {
             margin-top: 15px; /* Adjusted space above the footer */
             padding: 10px 0;
-            color: #7f8c8d; /* Darker gray for footer text */
+            color: var(--footer-text-color); /* Use variable */
             font-size: 0.9em;
             text-align: center;
             width: 100%; /* Ensure footer spans full width */
+            transition: color 0.3s ease; /* Smooth transition for mode change */
         }
 
-        /* Home Link Styling (now below the button grid) */
+        /* Bottom Actions Wrapper (for Home and Mode Toggle) */
+        .bottom-actions {
+            display: flex;
+            justify-content: center; /* Center the items */
+            align-items: center;
+            gap: 20px; /* Space between Home and Mode Toggle */
+            margin-top: 15px; /* Space above this section */
+            margin-bottom: 20px; /* Space below this section */
+            width: 100%; /* Ensure it spans the width */
+        }
+
+        /* Home Link Styling */
         .home-link-below-buttons {
             display: inline-flex; /* Use inline-flex to keep icon and text on one line */
             align-items: center;
             gap: 5px; /* Space between icon and text */
-            color: #3498db; /* Blue color for the link */
+            color: var(--button-link-color); /* Use variable */
             text-decoration: none;
             font-size: 1em;
             font-weight: bold;
-            margin-top: 15px; /* Space above the home link, below the button grid */
-            margin-bottom: 20px; /* Space below the home link */
             transition: color 0.3s ease;
         }
 
         .home-link-below-buttons:hover {
-            color: #2980b9; /* Darker blue on hover */
+            color: var(--button-link-hover-color); /* Use variable */
         }
 
         .home-link-below-buttons i {
             font-size: 1.2em;
+        }
+
+        /* Mode Toggle Button Styling */
+        .mode-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em; /* Icon size */
+            padding: 5px;
+            border-radius: 50%; /* Make it round */
+            color: var(--button-link-color); /* Use variable for icon color */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .mode-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.05); /* Subtle hover effect */
+        }
+
+        body.dark-mode .mode-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1); /* Darker hover for dark mode */
         }
 
         /* Responsive adjustments for smaller screens if needed */
@@ -165,6 +203,10 @@
             }
             hr {
                 width: 90%; /* Adjust line width for very small screens */
+            }
+            .bottom-actions {
+                flex-direction: column; /* Stack home and toggle on very small screens */
+                gap: 10px;
             }
         }
     </style>
@@ -198,13 +240,55 @@
                 <span>Lainnya 2</span>
             </a>
         </div>
-        <a href="#" class="home-link-below-buttons">
-            <i class="fas fa-home"></i> Home
-        </a>
+        <div class="bottom-actions">
+            <a href="#" class="home-link-below-buttons">
+                <i class="fas fa-home"></i> Home
+            </a>
+            <button id="modeToggle" class="mode-toggle" aria-label="Toggle dark and light mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
     </div>
     <hr> <!-- Garis di atas footer -->
     <footer>
         Made by Williyanto Adi 2025
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modeToggleBtn = document.getElementById('modeToggle');
+            const body = document.body;
+            const modeIcon = modeToggleBtn.querySelector('i');
+
+            // Check for saved theme preference in localStorage
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                body.classList.add('dark-mode');
+                modeIcon.classList.remove('fa-moon');
+                modeIcon.classList.add('fa-sun'); // Show sun icon for dark mode
+            } else {
+                // Default to light mode if no preference or preference is 'light'
+                body.classList.remove('dark-mode');
+                modeIcon.classList.remove('fa-sun');
+                modeIcon.classList.add('fa-moon'); // Show moon icon for light mode
+            }
+
+            modeToggleBtn.addEventListener('click', () => {
+                if (body.classList.contains('dark-mode')) {
+                    // Switch to light mode
+                    body.classList.remove('dark-mode');
+                    modeIcon.classList.remove('fa-sun');
+                    modeIcon.classList.add('fa-moon');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    // Switch to dark mode
+                    body.classList.add('dark-mode');
+                    modeIcon.classList.remove('fa-moon');
+                    modeIcon.classList.add('fa-sun');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
