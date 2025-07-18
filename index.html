@@ -36,12 +36,25 @@
             --animated-border-color: rgba(255, 255, 255, 0.3); /* Putih transparan lebih redup */
         }
 
+        /* Universal Box-Sizing */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         /* General Styling */
+        html, body {
+            width: 100vw; /* Pastikan mengambil lebar viewport penuh */
+            overflow-x: hidden; /* Mencegah scroll horizontal yang tidak diinginkan */
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             font-family: 'Inter', sans-serif; /* Set font utama ke Inter */
-            margin: 0;
-            padding: 0 15px 30px; /* Padding-bottom 30px untuk ruang di bawah */
-            box-sizing: border-box; /* Pastikan padding dan border termasuk dalam lebar/tinggi */
+            padding-top: 20px; /* Padding atas */
+            padding-bottom: 30px; /* Padding bawah */
+            padding-left: 15px; /* Padding kiri */
+            padding-right: 15px; /* Padding kanan */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -50,12 +63,10 @@
             background-color: var(--body-bg);
             color: var(--text-color-light);
             transition: background-color 0.3s ease, color 0.3s ease;
-            overflow-x: hidden; /* Mencegah scroll horizontal yang tidak diinginkan */
         }
 
         .container {
             text-align: center;
-            padding: 20px 0;
             width: 100%;
             max-width: 400px;
         }
@@ -288,7 +299,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Kalkulator Hambatan Konduktor v7</h1>
+        <h1>Kalkulator Hambatan Konduktor v8</h1>
         <hr> <div class="button-grid">
             <a href="https://www.iec.ch/" class="button button-iec">
                 <img src="https://via.placeholder.com/64/2ecc71/ffffff?text=IEC" alt="IEC Logo" class="button-icon-png">
@@ -303,7 +314,7 @@
                 <span>SPLN</span>
             </a>
             <a href="https://www.standards.org.au/" class="button button-asnzs">
-                <img src="as.png" alt="AS/NZS Logo" class="button-icon-png">
+                <img src="https://via.placeholder.com/64/9b59b6/ffffff?text=AS/NZS" alt="AS/NZS Logo" class="button-icon-png">
                 <span>AS/NZS</span>
             </a>
         </div>
