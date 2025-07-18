@@ -10,11 +10,13 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 0;
+            /* Added horizontal padding to create space from screen edges */
+            padding: 0 15px; /* 15px padding on left and right */
+            box-sizing: border-box; /* Ensures padding is included in the element's total width */
             display: flex;
-            flex-direction: column; /* Changed to column to stack main content and footer */
+            flex-direction: column; /* Stack main content and footer */
             justify-content: space-between; /* Space between container and footer */
-            align-items: center;
+            align-items: center; /* Centers items horizontally in a column flex container */
             min-height: 100vh;
             background-color: #f0f2f5; /* Light gray background */
             color: #ffffff; /* White text */
@@ -22,9 +24,9 @@
 
         .container {
             text-align: center;
-            padding: 20px;
-            width: 100%;
-            max-width: 400px; /* Max width for mobile view, ideal for devices like Samsung A24 */
+            padding: 20px 0; /* Removed horizontal padding from container, now handled by body */
+            width: 100%; /* Take full width within the body's padding */
+            max-width: 400px; /* Max width for mobile view */
         }
 
         h1 {
@@ -44,8 +46,7 @@
         /* Button Grid Styling */
         .button-grid {
             display: grid;
-            /* Responsive grid for 2 columns, each at least 144px wide */
-            grid-template-columns: repeat(auto-fit, minmax(144px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(144px, 1fr)); /* Responsive grid for 2 columns */
             gap: 15px; /* Spacing between buttons */
             margin-bottom: 20px; /* Space before the bottom HR */
             justify-content: center; /* Center the grid items within the grid container */
