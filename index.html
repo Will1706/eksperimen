@@ -8,103 +8,143 @@
     <style>
         /* Define CSS Variables for colors */
         :root {
-            --body-bg: #f0f2f5;
-            --text-color-light: #ffffff; /* For button text */
+            --body-bg: #f0f2f5; /* Kembali ke latar belakang cerah standar */
+            --text-color-light: #ffffff; /* Untuk teks tombol */
             --heading-color: #2c3e50;
             --hr-color: #ddd;
             --footer-text-color: #7f8c8d;
-            --button-link-color: #3498db; /* For home/mode toggle links */
+            --button-link-color: #3498db; /* Untuk link home/mode toggle */
             --button-link-hover-color: #2980b9;
+
+            /* Warna untuk border animasi */
+            --animated-border-color: rgba(255, 255, 255, 0.7); /* Putih transparan */
         }
 
         /* Dark Mode Styles */
         body.dark-mode {
-            --body-bg: #2c3e50; /* Dark background */
-            --text-color-light: #ecf0f1; /* Light text for buttons */
-            --heading-color: #ecf0f1; /* Light heading */
-            --hr-color: #555; /* Darker HR */
-            --footer-text-color: #bdc3c7; /* Lighter footer text */
-            --button-link-color: #9b59b6; /* Purple for links in dark mode */
+            --body-bg: #2c3e50; /* Latar belakang gelap */
+            --text-color-light: #ecf0f1; /* Teks terang untuk tombol */
+            --heading-color: #ecf0f1;
+            --hr-color: #555;
+            --footer-text-color: #bdc3c7;
+            --button-link-color: #9b59b6;
             --button-link-hover-color: #8e44ad;
+
+            --animated-border-color: rgba(255, 255, 255, 0.3); /* Putih transparan lebih redup */
         }
 
         /* General Styling */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 0 15px; /* 15px padding on left and right */
-            box-sizing: border-box; /* Ensures padding is included in the element's total width */
+            padding: 0 15px 30px; /* Padding-bottom 30px tetap untuk ruang di bawah */
+            box-sizing: border-box;
             display: flex;
-            flex-direction: column; /* Stack main content and footer */
-            justify-content: space-between; /* Space between container and footer */
-            align-items: center; /* Centers items horizontally in a column flex container */
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
             min-height: 100vh;
-            background-color: var(--body-bg); /* Use variable */
-            color: var(--text-color-light); /* Use variable (for default text, though buttons override) */
-            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for mode change */
+            background-color: var(--body-bg);
+            color: var(--text-color-light);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .container {
             text-align: center;
-            padding: 20px 0; /* Removed horizontal padding from container, now handled by body */
-            width: 100%; /* Take full width within the body's padding */
-            max-width: 400px; /* Max width for mobile view */
+            padding: 20px 0;
+            width: 100%;
+            max-width: 400px;
         }
 
         h1 {
-            color: var(--heading-color); /* Use variable */
-            margin-bottom: 30px; /* Space below title */
+            color: var(--heading-color);
+            margin-bottom: 30px;
             font-size: 1.8em;
-            transition: color 0.3s ease; /* Smooth transition for mode change */
+            transition: color 0.3s ease;
         }
 
         /* Horizontal Rule (HR) Styling */
         hr {
             border: none;
-            border-top: 1px solid var(--hr-color); /* Use variable */
-            width: 80%; /* Width of the line */
-            margin: 25px auto; /* Vertical margin for HR below title */
-            transition: border-top-color 0.3s ease; /* Smooth transition for mode change */
+            border-top: 1px solid var(--hr-color);
+            width: 80%;
+            margin: 25px auto;
+            transition: border-top-color 0.3s ease;
         }
 
         /* Button Grid Styling */
         .button-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(144px, 1fr)); /* Responsive grid for 2 columns */
-            gap: 15px; /* Spacing between buttons */
-            margin-bottom: 30px; /* Increased space below button grid to separate from bottom actions */
-            justify-content: center; /* Center the grid items within the grid container */
+            grid-template-columns: repeat(auto-fit, minmax(144px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
             align-items: center;
         }
 
+        /* Animated Border Button Style */
         .button {
             display: flex;
-            flex-direction: column; /* Stack image and text */
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            /* Background color will be set by specific classes */
-            color: var(--text-color-light); /* Use variable for button text color */
+            /* Background color will be set by specific classes below */
+            color: var(--text-color-light); /* Teks untuk tombol */
             padding: 20px 15px;
-            border-radius: 12px; /* Rounded corners */
+            border-radius: 12px;
             text-decoration: none;
             font-size: 1.1em;
             font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-            transition: all 0.3s ease; /* Smooth transitions for hover/active */
-            min-height: 100px; /* Ensure consistent button height */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            min-height: 100px;
+            position: relative; /* Penting untuk pseudo-element */
+            overflow: hidden; /* Pastikan border animasi tidak keluar */
+            z-index: 1; /* Pastikan tombol di atas border */
+        }
+
+        /* Pseudo-element for animated border */
+        .button::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%; /* Mulai dari tengah */
+            transform: translateX(-50%); /* Posisikan di tengah */
+            width: 0; /* Awalnya lebar 0 */
+            height: 4px; /* Ketebalan border */
+            background-color: var(--animated-border-color); /* Warna border animasi */
+            border-radius: 2px; /* Sedikit melengkung */
+            transition: width 0.3s ease-out; /* Animasi lebar */
+            z-index: -1; /* Di belakang konten tombol */
+        }
+
+        .button:hover::before {
+            width: 100%; /* Memanjang hingga penuh saat di-hover */
+        }
+
+        /* Hover & Active Effects for the main button container */
+        .button:hover {
+            opacity: 0.95; /* Sedikit transparan */
+            transform: translateY(-2px); /* Sedikit angkat */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .button:active {
+            opacity: 1;
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         /* Enhanced CSS for the PNG icons */
         .button .button-icon-png {
-            width: 64px; /* Ukuran gambar PNG */
-            height: 64px; /* Memastikan proporsi tetap 1:1 */
-            margin-bottom: 8px; /* Jarak antara gambar dan teks */
-            object-fit: contain; /* Memastikan gambar diskalakan dengan baik dalam wadahnya */
+            width: 64px;
+            height: 64px;
+            margin-bottom: 8px;
+            object-fit: contain;
             border-radius: 50%; /* Membuat ikon bulat */
-            /* Contoh Gradien (Anda bisa menyesuaikan warna) */
             background: linear-gradient(135deg, #FFD700, #FFA500); /* Default: Emas ke Oranye */
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25); /* Bayangan untuk kedalaman */
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; /* Transisi untuk efek hover */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
 
         /* Hover effects for the PNG icons */
@@ -113,70 +153,64 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* Bayangan lebih gelap dan menyebar */
         }
 
-        /* Individual Gradients for each icon (optional, override default .button-icon-png background) */
-        /* HANYA GUNAKAN JIKA ANDA INGIN IKON ANDA MEMILIKI BACKGROUND GRADIENT YANG BERBEDA */
-        .button-iec .button-icon-png { background: linear-gradient(135deg, #2ecc71, #27ae60); } /* Hijau IEC */
-        .button-icea .button-icon-png { background: linear-gradient(135deg, #3498db, #2980b9); } /* Biru ICEA */
-        .button-spln .button-icon-png { background: linear-gradient(135deg, #e67e22, #d35400); } /* Oranye SPLN */
-        .button-asnzs .button-icon-png { background: linear-gradient(135deg, #9b59b6, #8e44ad); } /* Ungu AS/NZS */
-        .button-lain1 .button-icon-png { background: linear-gradient(135deg, #f39c12, #e67e22); } /* Kuning Lainnya 1 */
-        .button-lain2 .button-icon-png { background: linear-gradient(135deg, #1abc9c, #16a085); } /* Toska Lainnya 2 */
-
+        /* Individual Gradients for each icon (optional) */
+        .button-iec .button-icon-png { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .button-icea .button-icon-png { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .button-spln .button-icon-png { background: linear-gradient(135deg, #e67e22, #d35400); }
+        .button-asnzs .button-icon-png { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .button-lain1 .button-icon-png { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .button-lain2 .button-icon-png { background: linear-gradient(135deg, #1abc9c, #16a085); }
 
         .button span {
-            display: block; /* Ensure text is on its own line */
-            color: var(--text-color-light); /* Explicitly set button text color to the light text variable */
+            display: block;
+            color: var(--text-color-light);
         }
 
-        /* Hover and Active Effects for the main button container */
-        .button:hover {
-            opacity: 0.9;
-            transform: translateY(-3px); /* Slight lift effect */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .button:active {
-            opacity: 1;
-            transform: translateY(0); /* Press down effect */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Specific button colors (these remain fixed regardless of mode) */
-        .button-iec { background-color: #2ecc71; } /* Emerald green */
-        .button-icea { background-color: #3498db; } /* Bright blue */
-        .button-spln { background-color: #e67e22; } /* Carrot orange */
-        .button-asnzs { background-color: #9b59b6; } /* Amethyst purple */
-        .button-lain1 { background-color: #f39c12; } /* Sunflower yellow */
-        .button-lain2 { background-color: #1abc9c; } /* Turquoise */
+        /* Specific button colors */
+        .button-iec { background-color: #2ecc71; }
+        .button-icea { background-color: #3498db; }
+        .button-spln { background-color: #e67e22; }
+        .button-asnzs { background-color: #9b59b6; }
+        .button-lain1 { background-color: #f39c12; }
+        .button-lain2 { background-color: #1abc9c; }
 
         /* Footer Styling */
         footer {
-            margin-top: 0; /* Footer's top margin controlled by HR's bottom margin */
-            padding: 10px 0;
-            color: var(--footer-text-color); /* Use variable */
+            margin-top: auto; /* Memastikan footer didorong ke bawah jika konten tidak penuh */
+            padding: 20px 0; /* Padding atas dan bawah untuk ruang */
+            color: var(--footer-text-color);
             font-size: 0.9em;
             text-align: center;
-            width: 100%; /* Ensure footer spans full width */
-            transition: color 0.3s ease; /* Smooth transition for mode change */
+            width: 100%;
+            transition: color 0.3s ease;
+        }
+
+        /* HR above footer */
+        .footer-hr {
+            margin: 10px auto; /* Mengurangi margin atas dan bawah menjadi 10px */
+            border: none;
+            border-top: 1px solid var(--hr-color);
+            width: 80%;
+            transition: border-top-color 0.3s ease;
         }
 
         /* Bottom Actions Wrapper (for Home and Mode Toggle) */
         .bottom-actions {
             display: flex;
-            justify-content: center; /* Center the items */
+            justify-content: center;
             align-items: center;
-            gap: 10px; /* Space between Home and Mode Toggle */
-            margin-top: 0; /* Top margin controlled by button-grid's bottom margin */
-            margin-bottom: 0; /* Reduced space below this section, to pull HR closer */
-            width: 100%; /* Ensure it spans the width */
+            gap: 10px;
+            margin-top: 0;
+            margin-bottom: 10px; /* Mengurangi margin bawah menjadi 10px */
+            width: 100%;
         }
 
         /* Home Link Styling */
         .home-link-below-buttons {
-            display: inline-flex; /* Use inline-flex to keep icon and text on one line */
+            display: inline-flex;
             align-items: center;
-            gap: 5px; /* Space between icon and text */
-            color: var(--button-link-color); /* Use variable */
+            gap: 5px;
+            color: var(--button-link-color);
             text-decoration: none;
             font-size: 1em;
             font-weight: bold;
@@ -184,7 +218,7 @@
         }
 
         .home-link-below-buttons:hover {
-            color: var(--button-link-hover-color); /* Use variable */
+            color: var(--button-link-hover-color);
         }
 
         .home-link-below-buttons i {
@@ -196,30 +230,25 @@
             background: none;
             border: none;
             cursor: pointer;
-            font-size: 1.2em; /* Icon size */
+            font-size: 1.2em;
             padding: 5px;
-            border-radius: 50%; /* Make it round */
-            color: var(--button-link-color); /* Use variable for icon color */
+            border-radius: 50%;
+            color: var(--button-link-color);
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .mode-toggle:hover {
-            background-color: rgba(0, 0, 0, 0.05); /* Subtle hover effect */
+            background-color: rgba(0, 0, 0, 0.05);
         }
 
         body.dark-mode .mode-toggle:hover {
-            background-color: rgba(255, 255, 255, 0.1); /* Darker hover for dark mode */
-        }
-
-        /* New CSS for the HR above the footer */
-        .footer-hr {
-            margin: 2px auto;
+            background-color: rgba(255, 255, 255, 0.1);
         }
 
         /* Responsive adjustments for smaller screens if needed */
         @media (max-width: 320px) {
             .button-grid {
-                grid-template-columns: 1fr; /* Single column on very small screens */
+                grid-template-columns: 1fr;
             }
             .button {
                 font-size: 1em;
@@ -228,13 +257,13 @@
             }
             h1 {
                 font-size: 1.5em;
-                margin-bottom: 25px; /* Adjust margin for smaller screens */
+                margin-bottom: 25px;
             }
             hr {
-                width: 90%; /* Adjust line width for very small screens */
+                width: 90%;
             }
             .bottom-actions {
-                flex-direction: column; /* Stack home and toggle on very small screens */
+                flex-direction: column;
                 gap: 10px;
             }
         }
@@ -242,10 +271,10 @@
 </head>
 <body>
     <div class="container">
-        <h1>Kalkulator Hambatan Konduktor rev5</h1>
+        <h1>Kalkulator Hambatan Konduktor</h1>
         <hr> <div class="button-grid">
             <a href="https://www.iec.ch/" class="button button-iec">
-                <img src="iec.png" alt="IEC Logo" class="button-icon-png">
+                <img src="https://via.placeholder.com/64/2ecc71/ffffff?text=IEC" alt="IEC Logo" class="button-icon-png">
                 <span>IEC</span>
             </a>
             <a href="https://www.icea.org/" class="button button-icea">
@@ -253,23 +282,23 @@
                 <span>ICEA</span>
             </a>
             <a href="https://spln.co.id/" class="button button-spln">
-                <img src="spln.png" alt="SPLN Logo" class="button-icon-png">
+                <img src="https://via.placeholder.com/64/e67e22/ffffff?text=SPLN" alt="SPLN Logo" class="button-icon-png">
                 <span>SPLN</span>
             </a>
             <a href="https://www.standards.org.au/" class="button button-asnzs">
-                <img src="as.png" alt="AS/NZS Logo" class="button-icon-png">
+                <img src="https://via.placeholder.com/64/9b59b6/ffffff?text=AS/NZS" alt="AS/NZS Logo" class="button-icon-png">
                 <span>AS/NZS</span>
             </a>
             <a href="https://www.google.com" class="button button-lain1">
-                <img src="spln.png" alt="Lainnya 1 Logo" class="button-icon-png">
+                <img src="https://via.placeholder.com/64/f39c12/ffffff?text=LAIN1" alt="Lainnya 1 Logo" class="button-icon-png">
                 <span>Lainnya 1</span>
             </a>
             <a href="https://www.wikipedia.org/" class="button button-lain2">
-                <img src="iec.png" alt="Lainnya 2 Logo" class="button-icon-png">
+                <img src="https://via.placeholder.com/64/1abc9c/ffffff?text=LAIN2" alt="Lainnya 2 Logo" class="button-icon-png">
                 <span>Lainnya 2</span>
             </a>
         </div>
-        <div class="bottom-actions">
+        <hr class="footer-hr"> <div class="bottom-actions">
             <a href="https://www.youtube.com/" class="home-link-below-buttons">
                 <i class="fas fa-home"></i> Home
             </a>
@@ -278,7 +307,7 @@
             </button>
         </div>
     </div>
-    <hr class="footer-hr"> <footer>
+    <footer>
         Made by Williyanto Adi 2025
     </footer>
 
