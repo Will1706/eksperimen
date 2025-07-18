@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Standar Kabel - Mobile View</title>
+    <title>Kalkulator Hambatan Konduktor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* General Styling */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            /* Added horizontal padding to create space from screen edges */
             padding: 0 15px; /* 15px padding on left and right */
             box-sizing: border-box; /* Ensures padding is included in the element's total width */
             display: flex;
@@ -27,11 +26,12 @@
             padding: 20px 0; /* Removed horizontal padding from container, now handled by body */
             width: 100%; /* Take full width within the body's padding */
             max-width: 400px; /* Max width for mobile view */
+            /* Removed flex properties from container to allow button-grid to manage its own layout */
         }
 
         h1 {
             color: #2c3e50; /* Dark blue-gray for heading */
-            margin-bottom: 15px; /* Reduced margin to make space for HR */
+            margin-bottom: 30px; /* Increased margin to create more space below title */
             font-size: 1.8em;
         }
 
@@ -40,7 +40,7 @@
             border: none;
             border-top: 1px solid #ddd; /* Light gray line */
             width: 80%; /* Width of the line */
-            margin: 20px auto; /* Center the line and add vertical spacing */
+            margin: 20px auto; /* Vertical margin for HR */
         }
 
         /* Button Grid Styling */
@@ -48,7 +48,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(144px, 1fr)); /* Responsive grid for 2 columns */
             gap: 15px; /* Spacing between buttons */
-            margin-bottom: 20px; /* Space before the bottom HR */
+            margin-bottom: 20px; /* Space before the home link/bottom HR */
             justify-content: center; /* Center the grid items within the grid container */
             align-items: center;
         }
@@ -119,12 +119,34 @@
 
         /* Footer Styling */
         footer {
-            margin-top: 20px; /* Space above the footer */
+            margin-top: 15px; /* Adjusted space above the footer */
             padding: 10px 0;
             color: #7f8c8d; /* Darker gray for footer text */
             font-size: 0.9em;
             text-align: center;
             width: 100%; /* Ensure footer spans full width */
+        }
+
+        /* Home Link Styling (now below the button grid) */
+        .home-link-below-buttons {
+            display: inline-flex; /* Use inline-flex to keep icon and text on one line */
+            align-items: center;
+            gap: 5px; /* Space between icon and text */
+            color: #3498db; /* Blue color for the link */
+            text-decoration: none;
+            font-size: 1em;
+            font-weight: bold;
+            margin-top: 15px; /* Space above the home link, below the button grid */
+            margin-bottom: 20px; /* Space below the home link */
+            transition: color 0.3s ease;
+        }
+
+        .home-link-below-buttons:hover {
+            color: #2980b9; /* Darker blue on hover */
+        }
+
+        .home-link-below-buttons i {
+            font-size: 1.2em;
         }
 
         /* Responsive adjustments for smaller screens if needed */
@@ -139,6 +161,7 @@
             }
             h1 {
                 font-size: 1.5em;
+                margin-bottom: 25px; /* Adjust margin for smaller screens */
             }
             hr {
                 width: 90%; /* Adjust line width for very small screens */
@@ -148,7 +171,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Pilih Standar Kabel</h1>
+        <h1>Kalkulator Hambatan Konduktor</h1>
         <hr> <!-- Garis di bawah judul -->
         <div class="button-grid">
             <a href="#" class="button button-iec">
@@ -175,6 +198,9 @@
                 <span>Lainnya 2</span>
             </a>
         </div>
+        <a href="#" class="home-link-below-buttons">
+            <i class="fas fa-home"></i> Home
+        </a>
     </div>
     <hr> <!-- Garis di atas footer -->
     <footer>
