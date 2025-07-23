@@ -1,385 +1,782 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Hambatan Konduktor</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Define CSS Variables for colors */
-        :root {
-            --body-bg: #f0f2f5; /* Kembali ke latar belakang cerah standar */
-            --text-color-light: #ffffff; /* Untuk teks tombol */
-            --heading-color: #2c3e50;
-            --hr-color: #ddd;
-            --bottom-text-color: #7f8c8d; /* Warna teks baru di bawah tombol */
-            --button-link-color: #3498db; /* Untuk link home/mode toggle */
-            --button-link-hover-color: #2980b9;
-
-            /* Warna untuk border animasi */
-            --animated-border-color: rgba(255, 255, 255, 0.7); /* Putih transparan */
-        }
-
-        /* Dark Mode Styles */
-        body.dark-mode {
-            --body-bg: #2c3e50; /* Latar belakang gelap */
-            --text-color-light: #ecf0f1; /* Teks terang untuk tombol */
-            --heading-color: #ecf0f1;
-            --hr-color: #555;
-            --bottom-text-color: #bdc3c7; /* Warna teks baru di dark mode */
-            --button-link-color: #9b59b6;
-            --button-link-hover-color: #8e44ad;
-
-            --animated-border-color: rgba(255, 255, 255, 0.3); /* Putih transparan lebih redup */
-        }
-
-        /* Universal Box-Sizing */
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
-
-        /* General Styling */
-        html, body {
-            width: 100vw; /* Pastikan mengambil lebar viewport penuh */
-            overflow-x: hidden; /* Mencegah scroll horizontal yang tidak diinginkan */
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif; /* Set font utama ke Inter */
-            padding-top: 20px; /* Padding atas */
-            padding-bottom: 30px; /* Padding bawah */
-            padding-left: 15px; /* Padding kiri */
-            padding-right: 15px; /* Padding kanan */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            min-height: 100vh;
-            background-color: var(--body-bg);
-            color: var(--text-color-light);
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .container {
-            text-align: center;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        h1 {
-            color: var(--heading-color);
-            margin-bottom: 15px;
-            font-size: 1.8em;
-            transition: color 0.3s ease;
-        }
-
-        /* Horizontal Rule (HR) Styling */
-        hr {
-            border: none;
-            border-top: 1px solid var(--hr-color);
-            width: 80%;
-            margin: 25px auto;
-            transition: border-top-color 0.3s ease;
-        }
-
-        /* Button Grid Styling */
-        .button-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(144px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Animated Border Button Style */
-        .button {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-color-light);
-            padding: 20px 15px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-size: 1.1em;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            min-height: 100px;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-
-        /* Pseudo-element for animated border */
-        .button::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 4px;
-            background-color: var(--animated-border-color);
-            border-radius: 2px;
-            transition: width 0.3s ease-out;
-            z-index: -1;
-        }
-
-        .button:hover::before {
-            width: 100%;
-        }
-
-        /* Hover & Active Effects for the main button container */
-        .button:hover {
-            opacity: 0.95;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .button:active {
-            opacity: 1;
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Enhanced CSS for the PNG icons */
-        .button .button-icon-png {
-            width: 64px;
-            height: 64px;
-            margin-bottom: 8px;
-            object-fit: contain;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #FFD700, #FFA500);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        }
-
-        /* Hover effects for the PNG icons */
-        .button .button-icon-png:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Individual Gradients for each icon */
-        .button-iec .button-icon-png { background: linear-gradient(135deg, #2ecc71, #27ae60); }
-        .button-icea .button-icon-png { background: linear-gradient(135deg, #3498db, #2980b9); }
-        .button-spln .button-icon-png { background: linear-gradient(135deg, #e67e22, #d35400); }
-        .button-asnzs .button-icon-png { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
-
-        .button span {
-            display: block;
-            color: var(--text-color-light);
-        }
-
-        /* Specific button colors */
-        .button-iec { background-color: #2ecc71; }
-        .button-icea { background-color: #3498db; }
-        .button-spln { background-color: #e67e22; }
-        .button-asnzs { background-color: #9b59b6; }
-
-        /* Bottom Actions Wrapper (for Home and Mode Toggle) */
-        .bottom-actions {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 20px; /* Jarak dari button-grid */
-            margin-bottom: 0; /* Hapus margin bawah karena teks akan langsung di bawahnya */
-            width: 100%;
-        }
-
-        /* Home Link Styling */
-        .home-link-below-buttons {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            color: var(--button-link-color);
-            text-decoration: none;
-            font-size: 1em;
-            font-weight: 600; /* Tetap tebal */
-            transition: color 0.3s ease;
-        }
-
-        .home-link-below-buttons:hover {
-            color: var(--button-link-hover-color);
-        }
-
-        .home-link-below-buttons i {
-            font-size: 1.2em;
-        }
-
-        /* Mode Toggle Button Styling */
-        .mode-toggle {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2em;
-            padding: 5px;
-            border-radius: 50%;
-            color: var(--button-link-color);
-            transition: background-color 0.3s ease, color 0.3s ease;
-            display: flex; /* Gunakan flexbox untuk mensejajarkan ikon dan teks */
-            align-items: center; /* Pusatkan secara vertikal */
-            gap: 5px; /* Jarak antara ikon dan teks */
-        }
-
-        /* Menjadikan teks di dalam mode toggle TIDAK tebal */
-        .mode-toggle span {
-            font-weight: normal; /* Mengubah kembali ke ketebalan normal/default */
-        }
-
-        .mode-toggle:hover {
-            background-color: rgba(0, 0, 0, 0.05);
-        }
-
-        body.dark-mode .mode-toggle:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        /* New HR below bottom-actions */
-        .hr-below-bottom-actions {
-            border: none;
-            border-top: 1px solid var(--hr-color);
-            width: 80%;
-            margin: 20px auto 10px; /* Jarak 20px dari atas, 10px dari bawah */
-            transition: border-top-color 0.3s ease;
-        }
-
-        /* Text below bottom actions */
-        .below-actions-text {
-            margin-top: 10px; /* Jarak dari hr-below-bottom-actions */
-            color: var(--bottom-text-color); /* Menggunakan variabel warna baru */
-            font-size: 0.9em;
-            text-align: center;
-            width: 100%;
-            transition: color 0.3s ease;
-        }
-
-        /* Responsive adjustments for smaller screens if needed */
-        @media (max-width: 320px) {
-            .button-grid {
-                grid-template-columns: 1fr;
-            }
-            .button {
-                font-size: 1em;
-                padding: 15px 10px;
-                min-height: 80px;
-            }
-            h1 {
-                font-size: 1.5em;
-                margin-bottom: 20px;
-            }
-            hr {
-                width: 90%;
-            }
-            .bottom-actions {
-                flex-direction: column;
-                gap: 10px;
-                margin-top: 15px;
-                margin-bottom: 0;
-            }
-            .hr-below-bottom-actions {
-                margin: 15px auto 8px; /* Sesuaikan margin di responsive */
-            }
-            .below-actions-text {
-                margin-top: 8px; /* Sesuaikan margin di responsive */
-            }
-            .mode-toggle {
-                font-size: 1em; /* Ukuran font lebih kecil untuk mode toggle di mobile */
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kalkulator Resistansi Konduktor ICEA v11</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg-color: #f5f5f5;
+      --text-color: #000;
+      --border-color: #ccc;
+      --input-bg: #fff;
+      --button-bg: #007bff;
+      --button-text: #fff;
+      --button-hover: #0056cc;
+      --footer-color: #777;
+      --divider: #ddd;
+      --info-bg: #e8f5ff;
+      --info-border: #90caf9;
+      --info-color: #1976d2;
+      --container-padding: 32px 24px;
+    }
+    body.dark {
+      --bg-color: #121212;
+      --text-color: #eee;
+      --border-color: #444;
+      --input-bg: #1e1e1e;
+      --button-bg: #4444ff;
+      --button-text: #fff;
+      --button-hover: #2222aa;
+      --footer-color: #aaa;
+      --divider: #555;
+      --info-bg: #222b38;
+      --info-border: #1976d2;
+      --info-color: #90caf9;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      width: 100vw;
+      overflow-x: hidden;
+    }
+    .container-main {
+      background: var(--input-bg);
+      padding: var(--container-padding);
+      border-radius: 20px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+      border: 1px solid var(--border-color);
+      position: relative;
+      margin: 0 auto;
+      margin-left: 24px;
+      margin-right: 24px;
+    }
+    .title-main {
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+    }
+    .divider {
+      height: 1px;
+      width: 100%;
+      background: var(--divider);
+      margin: 12px 0 24px 0;
+    }
+    .info-area {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--info-bg);
+      border: 1.5px solid var(--info-border);
+      border-radius: 10px;
+      padding: 10px 14px 10px 12px;
+      margin: 0 auto 20px auto;
+      transition: box-shadow 0.2s;
+      box-shadow: 0 3px 10px rgba(25, 118, 210, 0.07);
+      cursor: pointer;
+      user-select: none;
+      min-width: 32px;
+      max-width: 400px;
+      justify-content: flex-start;
+    }
+    .info-area.compact {
+      background: transparent;
+      border: none;
+      padding: 0;
+      box-shadow: none;
+      margin: 0;
+      min-width: 32px;
+      width: 32px;
+      max-width: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .info-area .info-icon {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: none;
+      color: var(--info-color);
+      cursor: pointer;
+      border-radius: 50%;
+      transition: background 0.2s;
+    }
+    .info-area.compact .info-icon:active,
+    .info-area.compact .info-icon:focus {
+      background: var(--info-bg);
+      outline: none;
+    }
+    .info-text {
+      font-size: 1rem;
+      color: var(--info-color);
+      font-weight: 500;
+      line-height: 1.45;
+      margin-left: 2px;
+      margin-top: 1px;
+    }
+    .info-text strong {
+      display: block;
+      margin-bottom: 2px;
+      font-weight: 700;
+      font-size: 1.04em;
+    }
+    .info-area-gap {
+      height: 20px;
+      width: 100%;
+      display: block;
+    }
+    .form-row {
+      display: flex !important;
+      flex-direction: row !important;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: nowrap !important;
+    }
+    .form-group {
+      flex: 1 1 0%;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      width: 100%;
+    }
+    .form-label {
+      font-size: 0.95rem;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+    .form-input,
+    select.form-input {
+      padding: 10px 14px;
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      font-size: 0.95rem;
+      background: var(--input-bg);
+      color: var(--text-color);
+      transition: border 0.2s;
+      width: 100%;
+    }
+    .form-input:focus {
+      border-color: var(--button-bg);
+      outline: none;
+    }
+    .result-box {
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      text-align: center;
+      padding: 12px 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 20px 0 28px 0;
+      background: var(--input-bg);
+    }
+    #hasil-status {
+      font-size: 0.88rem;
+      margin-top: 4px;
+    }
+    .hint-green {
+      color: green;
+      font-style: italic;
+      font-size: 1rem;
+      font-weight: 500;
+      margin-top: 8px;
+      margin-bottom: 3px;
+      display: block;
+    }
+    .btn-section {
+      margin-top: 32px;
+      margin-bottom: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: stretch;
+      justify-content: center;
+    }
+    .btn-row1, .btn-row2, .btn-row3 {
+      display: flex;
+      gap: 10px;
+      justify-content: center !important;
+      align-items: center;
+      width: 100%;
+    }
+    .btn-row3 {
+      gap: 10px;
+    }
+    .btn-row3 .main-btn {
+      flex: 1 0 auto;
+      min-width: 100px;
+      max-width: 180px;
+      text-align: center;
+    }
+    .btn-row3 .right-actions {
+      display: flex;
+      gap: 6px;
+      margin-left: 0;
+      align-items: center;
+    }
+    .main-btn {
+      padding: 8px 18px;
+      background: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      min-width: 0;
+      flex: 1;
+      max-width: 180px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .main-btn:hover {
+      background: var(--button-hover);
+    }
+    .icon-btn {
+      background: var(--button-bg);
+      color: var(--button-text);
+      border: none;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.25rem;
+      transition: background 0.2s;
+      margin-right: 2px;
+    }
+    .icon-btn:hover {
+      background: var(--button-hover);
+    }
+    .footer-main {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--footer-color);
+    }
+    .footer-main::before {
+      content: "";
+      display: block;
+      width: 100%;
+      height: 1px;
+      background: var(--divider);
+      margin-bottom: 12px;
+    }
+    /* Tambahkan responsive horizontal padding pada layar mobile */
+    @media (max-width: 600px) {
+      :root {
+        --container-padding: 16px 12px;
+      }
+      .container-main {
+        border-radius: 10px;
+        max-width: 100vw;
+        margin-left: 10px;
+        margin-right: 10px;
+      }
+    }
+    @media (max-width: 460px) {
+      :root {
+        --container-padding: 12px 8px;
+      }
+      .form-row { flex-direction: row !important; gap: 12px !important; flex-wrap: nowrap !important; }
+      .btn-section { gap: 9px; }
+      .btn-row1, .btn-row2, .btn-row3 { gap: 9px; flex-wrap: wrap; justify-content: center !important; }
+      .btn-row3 { justify-content: center !important; }
+      .main-btn { max-width: 100%; padding: 8px 8px; font-size: 0.92rem; }
+      .icon-btn { width: 34px; height: 34px; font-size: 1.08rem; }
+      .info-text { font-size: 0.98em; }
+      .info-area { padding: 10px 7px 10px 8px; }
+      .info-area.compact { min-width: 28px; }
+      .info-area-gap { height: 16px; }
+    }
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+      }
+      .btn-section, .footer-main, .info-area {
+        display: none !important;
+      }
+      .container-main {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+      }
+      .divider {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Kalkulator Hambatan Konduktor v9</h1>
-        <hr> <div class="button-grid">
-            <a href="iec.html" class="button button-iec">
-                <img src="iec.png" alt="IEC Logo" class="button-icon-png">
-                <span>IEC</span>
-            </a>
-            <a href="icea.html" class="button button-icea">
-                <img src="icea.png" alt="ICEA Logo" class="button-icon-png">
-                <span>ICEA</span>
-            </a>
-            <a href="../Kalkulator/Logo/SPLN.png" class="button button-spln">
-                <img src="spln.png" alt="SPLN Logo" class="button-icon-png">
-                <span>SPLN</span>
-            </a>
-            <a href="as.html" class="button button-asnzs">
-                <img src="as.png" alt="AS/NZS Logo" class="button-icon-png">
-                <span>AS/NZS</span>
-            </a>
-        </div>
-        <div class="bottom-actions">
-            <a href="https://www.youtube.com/" class="home-link-below-buttons">
-                <i class="fas fa-home"></i> Home
-            </a>
-            <button id="modeToggle" class="mode-toggle" aria-label="Toggle dark and light mode">
-                <i class="fas fa-moon"></i> <span id="modeText">Terang</span>
-            </button>
-        </div>
-        <hr class="hr-below-bottom-actions"> <div class="below-actions-text">
-            Made by Williyanto Adi 2025
-        </div>
+  <div class="container-main">
+    <div class="title-main">Kalkulator Resistansi Konduktor ICEA v11</div>
+    <div class="divider"></div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="alat">Pembacaan Alat (Ω)</label>
+        <input type="text" class="form-input" id="alat" style="flex:1;" inputmode="decimal" pattern="[0-9]*" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="panjang">Panjang (Feet)</label>
+        <input type="text" class="form-input" id="panjang" inputmode="decimal" pattern="[0-9]*" />
+      </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const modeToggleBtn = document.getElementById('modeToggle');
-            const body = document.body;
-            const modeIcon = modeToggleBtn.querySelector('i');
-            const modeText = document.getElementById('modeText');
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="suhu">Suhu (°C)</label>
+        <input type="text" class="form-input" id="suhu" inputmode="decimal" pattern="[0-9]*" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="faktor">Faktor Koreksi Suhu</label>
+        <input type="text" class="form-input" id="faktor" readonly />
+      </div>
+    </div>
 
-            // Fungsi untuk memperbarui teks mode
-            function updateModeText(isDarkMode) {
-                if (isDarkMode) {
-                    modeText.textContent = 'Gelap';
-                } else {
-                    modeText.textContent = 'Terang';
-                }
-            }
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label" for="bahan">Konduktor</label>
+        <select class="form-input" id="bahan">
+          <option value="CU">CU</option>
+          <option value="AL">AL</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="luas">Penampang</label>
+        <select class="form-input" id="luas">
+          <option value="8">8 AWG</option>
+          <option value="3000">3000 KCMIL</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="spesifikasi">Spec. Max</label>
+        <input type="text" class="form-input" id="spesifikasi" readonly />
+      </div>
+    </div>
 
-            // Check for saved theme preference in localStorage
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                body.classList.add('dark-mode');
-                modeIcon.classList.remove('fa-moon');
-                modeIcon.classList.add('fa-sun'); // Show sun icon for dark mode
-                updateModeText(true); // Perbarui teks menjadi "Gelap"
-            } else {
-                // Default to light mode if no preference or preference is 'light'
-                body.classList.remove('dark-mode');
-                modeIcon.classList.remove('fa-sun');
-                modeIcon.classList.add('fa-moon'); // Show moon icon for light mode
-                updateModeText(false); // Perbarui teks menjadi "Terang"
-            }
+    <div class="result-box" id="hasil">
+      <div id="hasil-nilai"></div>
+      <div id="hasil-status"></div>
+    </div>
+    <div id="hasil-spek-tabel" style="font-style:italic; margin-top:6px;"></div>
 
-            modeToggleBtn.addEventListener('click', () => {
-                if (body.classList.contains('dark-mode')) {
-                    // Switch to light mode
-                    body.classList.remove('dark-mode');
-                    modeIcon.classList.remove('fa-sun');
-                    modeIcon.classList.add('fa-moon');
-                    localStorage.setItem('theme', 'light');
-                    updateModeText(false); // Perbarui teks menjadi "Terang"
-                } else {
-                    // Switch to dark mode
-                    body.classList.add('dark-mode');
-                    modeIcon.classList.remove('fa-moon');
-                    modeIcon.classList.add('fa-sun');
-                    localStorage.setItem('theme', 'dark');
-                    updateModeText(true); // Perbarui teks menjadi "Gelap"
-                }
-            });
+    <div class="btn-section" id="btnSection">
+      <div class="btn-row1">
+        <button class="main-btn" id="btn-iec">Spek. IEC</button>
+        <button class="main-btn" id="btn-icea">Spek. ICEA</button>
+        <button class="main-btn" id="btn-asnzs">Spek. AS</button>
+      </div>
+      <div class="btn-row2">
+        <button class="main-btn" id="btn-spln">Spek. SPLN</button>
+        <button class="main-btn" id="btn-simpan">Simpan Pengujian</button>
+      </div>
+      <div class="btn-row3">
+        <div class="right-actions">
+          <button class="icon-btn" id="toggleMode" title="Toggle Dark/Light" aria-label="Toggle Dark/Light">
+            <span id="toggleIcon"></span>
+          </button>
+        </div>
+        <button class="main-btn" id="btn-laporan">Laporan</button>
+        <div class="right-actions">
+          <span id="infoArea" class="info-area compact" tabindex="0" aria-label="Tampilkan informasi aplikasi" title="Informasi">
+            <span class="info-icon" id="infoIcon"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="info-area-gap" id="infoAreaGap" style="display:none;"></div>
+    <div id="infoAreaExpandedContainer"></div>
+    <div class="footer-main">Made by Williyanto Adi 2025</div>
+  </div>
+
+  <script>
+    function onlyNumberInput(el) {
+      el.addEventListener('input', function() {
+        let val = el.value;
+        val = val.replace(/,/g, '.');
+        val = val.replace(/[^0-9.]/g, '');
+        const parts = val.split('.');
+        if (parts.length > 2) {
+          val = parts[0] + '.' + parts.slice(1).join('');
+        }
+        el.value = val;
+      });
+    }
+    onlyNumberInput(document.getElementById("alat"));
+    onlyNumberInput(document.getElementById("panjang"));
+    onlyNumberInput(document.getElementById("suhu"));
+
+    // Info Area Toggle
+    const infoArea = document.getElementById("infoArea");
+    const infoAreaExpandedContainer = document.getElementById("infoAreaExpandedContainer");
+    const infoAreaGap = document.getElementById("infoAreaGap");
+    let infoExpanded = false;
+    const infoContent = `
+      <div class="info-area" id="infoAreaExpanded" tabindex="0">
+        <span class="info-icon" id="infoIconExpanded">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <circle cx="11" cy="11" r="10" stroke="currentColor" stroke-width="2"/>
+            <rect x="10" y="10" width="2" height="7" rx="1" fill="currentColor"/>
+            <rect x="10" y="6" width="2" height="2" rx="1" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="info-text">
+          <strong>Tentang aplikasi ini</strong>
+          Ini adalah aplikasi untuk menghitung nilai resistansi pada konduktor Tembaga (CU), Aluminium (AL) dengan suhu dan panjang.
+        </span>
+      </div>
+    `;
+    function expandInfoArea() {
+      if (!infoExpanded) {
+        infoArea.style.display = "none";
+        infoAreaGap.style.display = "block";
+        infoAreaExpandedContainer.innerHTML = infoContent;
+        infoExpanded = true;
+        const icon = document.getElementById("infoIconExpanded");
+        const area = document.getElementById("infoAreaExpanded");
+        icon.addEventListener("click", collapseInfoArea);
+        area.addEventListener("click", function(e) {
+          if (e.target === icon || e.target.closest('.info-icon')) collapseInfoArea();
         });
-    </script>
+        area.addEventListener("keydown", function(e) {
+          if (e.key === "Enter" || e.key === " ") {
+            collapseInfoArea();
+          }
+        });
+      }
+    }
+    function collapseInfoArea() {
+      if (infoExpanded) {
+        infoArea.style.display = "";
+        infoAreaGap.style.display = "none";
+        infoAreaExpandedContainer.innerHTML = "";
+        infoExpanded = false;
+      }
+    }
+    infoArea.addEventListener("click", expandInfoArea);
+    infoArea.addEventListener("keydown", function(e) {
+      if (e.key === "Enter" || e.key === " ") {
+        expandInfoArea();
+      }
+    });
+    infoArea.addEventListener("focus", function() {
+      infoArea.style.outline = "2px solid var(--info-color)";
+    });
+    infoArea.addEventListener("blur", function() {
+      infoArea.style.outline = "";
+    });
+
+    // Theme Toggle
+    const toggleMode = document.getElementById("toggleMode");
+    const toggleIcon = document.getElementById("toggleIcon");
+    function setThemeIcon(isDark) {
+      if (isDark) {
+        toggleIcon.innerHTML = `
+          <svg id="icon-moon" width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M17.5 14.7A7.01 7.01 0 0 1 7.3 4.5c0-.3-.3-.5-.6-.4A9 9 0 1 0 18 18c.2-.3-.1-.6-.5-.6z"
+                  stroke="currentColor" stroke-width="2" fill="currentColor"/>
+          </svg>
+        `;
+      } else {
+        toggleIcon.innerHTML = `
+          <svg id="icon-sun" width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <circle cx="11" cy="11" r="5" stroke="currentColor" stroke-width="2"/>
+            <g stroke="currentColor" stroke-width="2">
+              <line x1="11" y1="2" x2="11" y2="5"/>
+              <line x1="11" y1="17" x2="11" y2="20"/>
+              <line x1="2" y1="11" x2="5" y2="11"/>
+              <line x1="17" y1="11" x2="20" y2="11"/>
+              <line x1="5.22" y1="5.22" x2="7.07" y2="7.07"/>
+              <line x1="14.93" y1="14.93" x2="16.78" y2="16.78"/>
+              <line x1="16.78" y1="5.22" x2="14.93" y2="7.07"/>
+              <line x1="7.07" y1="14.93" x2="5.22" y2="16.78"/>
+            </g>
+          </svg>
+        `;
+      }
+    }
+    toggleMode.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      setThemeIcon(document.body.classList.contains('dark'));
+    });
+    setThemeIcon(document.body.classList.contains('dark'));
+
+    // Data & Kalkulasi
+    const bahanEl = document.getElementById('bahan');
+    const luasEl = document.getElementById('luas');
+    const spesifikasiEl = document.getElementById('spesifikasi');
+    const suhuEl = document.getElementById('suhu');
+    const faktorEl = document.getElementById('faktor');
+    const hasilNilai = document.getElementById("hasil-nilai");
+    const hasilStatus = document.getElementById("hasil-status");
+    const hasilEl = document.getElementById("hasil");
+    const alatEl = document.getElementById("alat");
+
+    let laporanPengujian = [];
+
+    // Data spek untuk hasil uji
+    const specData = {
+      CU: {
+        "8": "0,66504",
+        "3000": "0,00370"
+      },
+      AL: {
+        "8": "1,09140",
+        "3000": "0,00608"
+      }
+    };
+    // Data spek sesuai tabel permintaan user
+    const spekTabelData = {
+      CU: {
+        "8": "0,66504",
+        "3000": "0,00370"
+      },
+      AL: {
+        "8": "1,09140",
+        "3000": "0,00608"
+      }
+    };
+    const suhuData = {
+      CU: {
+        "0": "1.107",
+        "40": "0.944"
+      },
+      AL: {
+        "0": "1.110",
+        "40": "0.944"
+      }
+    };
+
+    function getLuasValue() {
+      return luasEl.options[luasEl.selectedIndex].value;
+    }
+
+    function getGreeting(now) {
+      const jam = now.getHours();
+      const menit = now.getMinutes();
+      const totalMenit = jam * 60 + menit;
+      if (totalMenit >= 300 && totalMenit <= 659) return "Selamat Pagi,";
+      if (totalMenit >= 660 && totalMenit <= 899) return "Selamat Siang,";
+      if (totalMenit >= 900 && totalMenit <= 1079) return "Selamat Sore,";
+      if (totalMenit >= 1080 && totalMenit <= 1439) return "Selamat Malam,";
+      return "";
+    }
+
+    function updateSpec() {
+      const bahan = bahanEl.value;
+      const luas = getLuasValue();
+      spesifikasiEl.value = specData[bahan]?.[luas] || "";
+      hitungHasil();
+    }
+
+    function updateFaktor() {
+      const bahan = bahanEl.value;
+      const suhuValue = suhuEl.value.replace(",", ".").trim();
+      let suhuNumber = parseFloat(suhuValue);
+      let faktor = "";
+      if (!isNaN(suhuNumber) && suhuData[bahan]) {
+        if (Math.abs(suhuNumber - 21.1) < 0.0001 && suhuData[bahan]["21.1"]) {
+          faktor = suhuData[bahan]["21.1"];
+        } else if (suhuData[bahan][suhuNumber]) {
+          faktor = suhuData[bahan][suhuNumber];
+        } else if (suhuData[bahan][Math.floor(suhuNumber)]) {
+          faktor = suhuData[bahan][Math.floor(suhuNumber)];
+        }
+      }
+      faktorEl.value = faktor;
+      hitungHasil();
+    }
+
+    function isInputLengkap() {
+      return alatEl.value.trim() !== "" &&
+        document.getElementById("panjang").value.trim() !== "" &&
+        suhuEl.value.trim() !== "" &&
+        faktorEl.value.trim() !== "";
+    }
+
+    function showGreetingHint() {
+      const now = new Date();
+      const greeting = getGreeting(now);
+      if (greeting) {
+        hasilStatus.innerHTML = `<span class="hint-green">${greeting} Mohon lengkapi data untuk memulai.</span>`;
+      } else {
+        hasilStatus.innerHTML = `<span class="hint-green">Mohon lengkapi data, untuk memulai. aplikasi ini</span>`;
+      }
+      hasilNilai.textContent = "";
+      hasilEl.style.color = "inherit";
+    }
+
+    function hitungHasil() {
+      let alatValue = alatEl.value.replace(",", ".");
+      let alatNumber = parseFloat(alatValue);
+      const panjang = parseFloat(document.getElementById("panjang").value.replace(",", "."));
+      const faktor = parseFloat(faktorEl.value.replace(",", "."));
+      const bahan = bahanEl.value;
+      const luas = getLuasValue();
+      const specRaw = specData[bahan]?.[luas]?.replace(",", ".");
+      const spec = parseFloat(specRaw);
+
+      if (!isInputLengkap()) {
+        showGreetingHint();
+        return;
+      }
+      if (!isNaN(alatNumber) && !isNaN(panjang) && !isNaN(faktor) && panjang !== 0) {
+        const hasil = alatNumber / panjang * faktor;
+        hasilNilai.textContent = hasil.toFixed(5) + " Ω/feet";
+
+        if (!isNaN(spec)) {
+          if (hasil < spec) {
+            hasilEl.style.color = "green";
+            hasilStatus.textContent = "Hasil pengujian memenuhi standar.";
+            hasilStatus.style.color = "green";
+          } else {
+            hasilEl.style.color = "red";
+            hasilStatus.textContent = "Hasil pengujian tidak memenuhi standar.";
+            hasilStatus.style.color = "red";
+          }
+        } else {
+          hasilEl.style.color = "gray";
+          hasilStatus.textContent = "Spec tidak tersedia untuk perbandingan.";
+          hasilStatus.style.color = "gray";
+        }
+      } else {
+        showGreetingHint();
+      }
+    }
+
+    function updateSpekTabel() {
+      const bahan = bahanEl.value;
+      const luas = getLuasValue();
+      const spekTabel = spekTabelData[bahan]?.[luas];
+      const hasilSpekTabel = document.getElementById("hasil-spek-tabel");
+      if (spekTabel) {
+        hasilSpekTabel.textContent = `Spek sesuai tabel : ${spekTabel} Ω/feet`;
+      } else {
+        hasilSpekTabel.textContent = "";
+      }
+    }
+
+    function simpanPengujian() {
+      const alat = alatEl.value || "-";
+      const panjang = document.getElementById("panjang").value || "-";
+      const suhu = suhuEl.value || "-";
+      const faktor = faktorEl.value || "-";
+      const bahan = bahanEl.options[bahanEl.selectedIndex].text || "-";
+      const luas = luasEl.options[luasEl.selectedIndex].text || "-";
+      const spesifikasi = spesifikasiEl.value || "-";
+      const hasil = hasilNilai.textContent || "-";
+      const status = hasilStatus.textContent || "-";
+      const now = new Date();
+      const jamPengujian = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      const tanggalPengujian = now.toLocaleDateString('id-ID');
+      laporanPengujian.push({
+        alat, panjang, suhu, faktor, bahan, luas, spesifikasi, hasil, status,
+        tanggal: tanggalPengujian,
+        jam: jamPengujian
+      });
+      alert("Pengujian berhasil disimpan ke laporan!");
+    }
+
+    document.getElementById("btn-simpan").addEventListener("click", simpanPengujian);
+
+    bahanEl.addEventListener('change', () => {
+      updateSpec();
+      updateFaktor();
+      updateSpekTabel();
+    });
+    luasEl.addEventListener('change', () => {
+      updateSpec();
+      updateSpekTabel();
+    });
+    suhuEl.addEventListener('input', updateFaktor);
+    alatEl.addEventListener("input", hitungHasil);
+    document.getElementById("panjang").addEventListener("input", hitungHasil);
+
+    document.getElementById("btn-laporan").addEventListener("click", () => {
+      if (laporanPengujian.length === 0) {
+        alert("Belum ada pengujian yang disimpan dalam laporan.");
+        return;
+      }
+      let isiLaporan = `Laporan Perhitungan Resistansi Konduktor\n`;
+      isiLaporan += `Total Pengujian: ${laporanPengujian.length}\n\n`;
+
+      laporanPengujian.forEach((uji, idx) => {
+        isiLaporan += `--- Pengujian ke-${idx+1} ---\n`;
+        isiLaporan += `Tanggal: ${uji.tanggal}\n`;
+        isiLaporan += `Jam   : ${uji.jam}\n\n`;
+        isiLaporan += `Input:\n`;
+        isiLaporan += `- Pembacaan Alat: ${uji.alat} Ω\n`;
+        isiLaporan += `- Panjang (Feet): ${uji.panjang}\n`;
+        isiLaporan += `- Suhu (°C): ${uji.suhu}\n`;
+        isiLaporan += `- Faktor Koreksi Suhu: ${uji.faktor}\n\n`;
+        isiLaporan += `Data Konduktor:\n`;
+        isiLaporan += `- Jenis Konduktor: ${uji.bahan}\n`;
+        isiLaporan += `- Penampang: ${uji.luas}\n`;
+        isiLaporan += `- Spesifikasi Standar: ${uji.spesifikasi}\n\n`;
+        isiLaporan += `Hasil Perhitungan:\n`;
+        isiLaporan += `- Resistansi (Ω/feet): ${uji.hasil}\n`;
+        isiLaporan += `- Status Pengujian: ${uji.status}\n\n`;
+      });
+
+      const blob = new Blob([isiLaporan], {type: "text/plain"});
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "Laporan-Resistansi-Konduktor.txt";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    });
+
+    document.getElementById("btn-iec").addEventListener("click", function() {
+      window.location.href = "https://google.com";
+    });
+    document.getElementById("btn-icea").addEventListener("click", function() {
+      window.location.href = "https://youtube.com";
+    });
+    document.getElementById("btn-asnzs").addEventListener("click", function() {
+      window.location.href = "https://facebook.com";
+    });
+    document.getElementById("btn-spln").addEventListener("click", function() {
+      window.location.href = "https://github.com";
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      bahanEl.value = "CU";
+      luasEl.value = "8";
+      updateSpec();
+      updateFaktor();
+      updateSpekTabel();
+      alatEl.focus();
+      showGreetingHint();
+      collapseInfoArea();
+    });
+  </script>
 </body>
 </html>
