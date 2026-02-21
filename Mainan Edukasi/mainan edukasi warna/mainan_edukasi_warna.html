@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Angka & Warna - Williyanto Adi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
+        h3 { font-family: 'Fredoka One', cursive; color: #333; margin-top: 20px; }
+        
+        /* Layar Overlay untuk memicu Audio */
+        #audio-trigger {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.9); z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer;
+        }
+
+        .guide-box { height: 60px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; color: white; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .target-box { height: 80px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; background: white; border: 3px dashed #ccc; border-radius: 15px; cursor: pointer; transition: 0.3s; color: #aaa; }
+        .target-active { border: 4px solid #007bff !important; box-shadow: 0 0 15px rgba(0, 123, 255, 0.5); transform: scale(1.05); color: #007bff; animation: pulse 1.5s infinite; }
+
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(0, 123, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); } }
+
+        .color-selector { width: 100%; height: 60px; border-radius: 12px; cursor: pointer; border: 4px solid #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .c1 { background-color: #FF0000 !important; color: white !important; }
+        .c2 { background-color: #FFFF00 !important; color: #333 !important; }
+        .c3 { background-color: #28a745 !important; color: white !important; }
+        .c4 { background-color: #007bff !important; color: white !important; }
+        .c5 { background-color: #6f42c1 !important; color: white !important; }
+
+        .section-label { font-weight: bold; font-size: 0.8rem; color: #777; margin-top: 15px; margin-bottom: 5px; display: block; text-transform: uppercase; }
+        footer { margin-top: auto; background: #fff; padding: 15px; border-top: 1px solid #ddd; font-weight: bold; color: #555; text-align: center; }
+        .correct-pop { animation: pop 0.4s ease-out; border-style: solid !important; }
+        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+<div id="audio-trigger" onclick="startWithAudio()">
+    <h1 style="font-family: 'Fredoka One'; color: #007bff;">KLIK UNTUK MAIN</h1>
+    <p class="text-secondary">Ayo belajar warna!</p>
+</div>
+
+<div class="container py-3 flex-grow-1 text-center" style="max-width: 500px;">
+    <h3>🎨 Game Angka & Warna</h3>
+
+    <button class="btn btn-outline-dark rounded-pill px-4 my-3 fw-bold" onclick="resetGame()">
+        🔄 Ulang Manual
+    </button>
+
+    <span class="section-label">Contoh Pasangan:</span>
+    <div class="row g-2 row-cols-5 mb-4" id="guide-container"></div>
+
+    <div id="status-msg" class="fw-bold mb-3 text-secondary" style="height: 30px; font-size: 1.1rem;">Klik angka dulu!</div>
+
+    <span class="section-label">1. PILIH ANGKA:</span>
+    <div class="row g-2 row-cols-5 mb-4" id="target-container"></div>
+
+    <div class="p-3 bg-white rounded-4 shadow-sm border">
+        <span class="section-label mt-0">2. PILIH WARNA:</span>
+        <div class="row g-2 row-cols-5" id="selector-container"></div>
+    </div>
+</div>
+
+<footer>Mainan Edukasi by Williyanto Adi</footer>
+
+<script>
+    let selectedBoxNum = null;
+    let selectedBoxElement = null;
+    const numbers = [1, 2, 3, 4, 5];
+
+    // Audio
+    const soundStart = new Audio('start.mp3');
+    const soundsBenar = [new Audio('benar1.mp3'), new Audio('benar2.mp3'), new Audio('benar3.mp3'), new Audio('benar4.mp3'), new Audio('benar5.mp3')];
+    const soundsSalah = [new Audio('salah1.mp3'), new Audio('salah2.mp3'), new Audio('salah3.mp3'), new Audio('salah4.mp3'), new Audio('salah5.mp3')];
+
+    function startWithAudio() {
+        document.getElementById('audio-trigger').style.display = 'none';
+        soundStart.play(); // Sekarang suara start pasti berbunyi karena dipicu klik
+        resetGame();
+    }
+
+    function playRandomSound(audioArray) {
+        const randomIndex = Math.floor(Math.random() * audioArray.length);
+        const sound = audioArray[randomIndex];
+        sound.currentTime = 0;
+        sound.play();
+    }
+
+    function resetGame() {
+        selectedBoxNum = null;
+        selectedBoxElement = null;
+        updateStatus("Klik salah satu angka dulu!", "text-secondary");
+        
+        const guideCont = document.getElementById('guide-container');
+        const targetCont = document.getElementById('target-container');
+        const selectCont = document.getElementById('selector-container');
+
+        guideCont.innerHTML = ""; targetCont.innerHTML = ""; selectCont.innerHTML = "";
+
+        numbers.forEach(n => {
+            guideCont.innerHTML += `<div class="col"><div class="guide-box c${n}">${n}</div></div>`;
+        });
+
+        [...numbers].sort(() => Math.random() - 0.5).forEach(n => {
+            targetCont.innerHTML += `<div class="col"><div class="target-box" id="box-${n}" onclick="selectTarget(this, ${n})">${n}</div></div>`;
+        });
+
+        [...numbers].sort(() => Math.random() - 0.5).forEach(n => {
+            selectCont.innerHTML += `<div class="col"><div class="color-selector c${n}" onclick="pickColor('c${n}')"></div></div>`;
+        });
+    }
+
+    function selectTarget(element, num) {
+        document.querySelectorAll('.target-box').forEach(el => el.classList.remove('target-active'));
+        element.classList.add('target-active');
+        selectedBoxNum = num;
+        selectedBoxElement = element;
+        updateStatus("Cari warna untuk angka " + num, "text-primary");
+    }
+
+    function pickColor(colorClass) {
+        if (selectedBoxNum === null) return;
+
+        if (colorClass === "c" + selectedBoxNum) {
+            playRandomSound(soundsBenar);
+            selectedBoxElement.className = "target-box " + colorClass + " correct-pop";
+            selectedBoxElement.onclick = null;
+            selectedBoxNum = null;
+            updateStatus("HEBAT! 🎉", "text-success");
+            checkWin();
+        } else {
+            playRandomSound(soundsSalah);
+            updateStatus("Coba lagi! ❌", "text-danger");
+            selectedBoxElement.animate([{ transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'translateX(0)' }], { duration: 200 });
+        }
+    }
+
+    function checkWin() {
+        const solved = document.querySelectorAll('.correct-pop').length;
+        if (solved === 5) {
+            updateStatus("YAY! KAMU MENANG! 🏆", "text-success");
+            // Otomatis restart setelah 3 detik
+            setTimeout(() => {
+                soundStart.play();
+                resetGame();
+            }, 3000);
+        }
+    }
+
+    function updateStatus(text, colorClass) {
+        const msg = document.getElementById('status-msg');
+        msg.innerText = text;
+        msg.className = "fw-bold mb-3 " + colorClass;
+    }
+</script>
+
+</body>
+</html>
