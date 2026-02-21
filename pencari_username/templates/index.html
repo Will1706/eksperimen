@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesin Pelacak Digital | OSINT Tool</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .search-box {
+            border-radius: 50px;
+            padding: 15px 25px;
+            border: 2px solid #dee2e6;
+        }
+        .btn-search {
+            border-radius: 50px;
+            padding: 10px 30px;
+            font-weight: 600;
+        }
+        .badge-found { background-color: #198754; }
+        .badge-notfound { background-color: #dc3545; }
+        .platform-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-section text-center shadow">
+        <div class="container">
+            <h1 class="display-4 fw-bold mb-3">🔍 FinderOSINT</h1>
+            <p class="lead">Lacak profil sosial, komentar, dan jejak digital di seluruh internet.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg p-4">
+                    <form method="POST" action="/">
+                        <div class="input-group mb-3">
+                            <input type="text" name="username" class="form-control search-box" 
+                                   placeholder="Masukkan Nama Lengkap atau Username..." 
+                                   value="{{ query }}" required>
+                            <button class="btn btn-primary btn-search" type="submit">Mulai Lacak</button>
+                        </div>
+                        <small class="text-muted">Contoh: "Budi Santoso" atau "budisanto123"</small>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% if query %}
+        <div class="mt-5">
+            <h3 class="mb-4 text-center">Hasil Analisis untuk: <span class="text-primary text-decoration-underline">{{ query }}</span></h3>
+            
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header bg-white py-3">
+                            <h5 class="mb-0 fw-bold text-dark">📱 Status Profil Sosial</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush">
+                                {% if profile_results %}
+                                    {% for res in profile_results %}
+                                    <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                        <div>
+                                            <strong>{{ res.name }}</strong>
+                                        </div>
+                                        <div>
+                                            <span class="badge {{ 'badge-found' if res.status == 'Ditemukan' else 'badge-notfound' }} me-2">
+                                                {{ res.status }}
+                                            </span>
+                                            <a href="{{ res.url }}" target="_blank" class="btn btn-sm btn-outline-secondary">Buka</a>
+                                        </div>
+                                    </li>
+                                    {% endfor %}
+                                {% else %}
+                                    <li class="list-group-item text-center py-4 text-muted small">
+                                        (Gunakan fitur pencarian profil di backend untuk mengaktifkan bagian ini)
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 mb-4">
+                    <div class="card shadow-sm h-100 border-info">
+                        <div class="card-header bg-info text-white py-3">
+                            <h5 class="mb-0 fw-bold">💬 Jejak Komentar & Konten</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="small text-muted mb-4">Klik tautan di bawah untuk melihat penyebutan nama/username secara spesifik di dalam forum atau platform.</p>
+                            
+                            <div class="list-group">
+                                {% for res in mention_results %}
+                                <a href="{{ res.url }}" target="_blank" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <span>
+                                        <strong>{{ res.platform }}</strong><br>
+                                        <small class="text-muted">Cari diskusi di {{ res.platform }}</small>
+                                    </span>
+                                    <span class="text-primary">➔</span>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4 mb-5">
+                <button onclick="window.print()" class="btn btn-outline-dark btn-sm">🖨️ Cetak Laporan PDF</button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer class="text-center py-4 mt-5 border-top bg-white">
+        <p class="text-muted mb-0">© 2026 FinderOSINT - Gunakan alat ini dengan bijak & etis.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
