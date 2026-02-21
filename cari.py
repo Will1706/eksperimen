@@ -1,16 +1,31 @@
 import requests
 
-def search_person(name):
-    api_key = "YOUR_GOOGLE_API_KEY"
-    search_engine_id = "YOUR_CX_ID"
-    url = f"https://www.googleapis.com/customsearch/v1?q={name}&key={api_key}&cx={search_engine_id}"
-    
-    response = requests.get(url)
-    results = response.json()
-    
-    for item in results.get("items", []):
-        print(f"Judul: {item['title']}")
-        print(f"Link: {item['link']}\n")
+def check_username(username):
+    # Daftar platform dan struktur URL-nya
+    platforms = {
+        "Instagram": f"https://www.instagram.com/{username}/",
+        "GitHub": f"https://api.github.com/users/{username}",
+        "Twitter (X)": f"https://twitter.com/{username}",
+        "TikTok": f"https://www.tiktok.com/@{username}",
+        "Pinterest": f"https://www.pinterest.com/{username}/",
+    }
 
-# Contoh penggunaan
-search_person("Budi Santoso")
+    print(f"--- Mencari username: {username} ---\n")
+
+    for platform, url in platforms.items():
+        try:
+            response = requests.get(url, timeout=5)
+            
+            # Logika umum: Jika status_code 200, berarti akun ditemukan
+            if response.status_code == 200:
+                print(f"[✅] {platform}: Ditemukan! -> {url}")
+            elif response.status_code == 404:
+                print(f"[❌] {platform}: Tidak Tersedia / Tidak Ada.")
+            else:
+                print(f"[?] {platform}: Status tidak menentu ({response.status_code})")
+        except requests.exceptions.RequestException:
+            print(f"[!] {platform}: Gagal terhubung (koneksi bermasalah).")
+
+# Jalankan fungsi
+user_input = input("Masukkan username yang ingin dicari: ")
+check_username(user_input)
