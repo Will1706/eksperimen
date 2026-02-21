@@ -6,17 +6,23 @@
     <title>Game Angka & Warna - Williyanto Adi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body { background-color: #f8f9fa; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
         h3 { font-family: 'Fredoka One', cursive; color: #333; margin-top: 20px; }
         
-        /* Layar Overlay untuk memicu Audio */
         #audio-trigger {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.9); z-index: 9999;
+            background: rgba(255,255,255,0.95); z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer;
         }
+
+        /* Styling Skor */
+        .score-container { display: flex; justify-content: center; gap: 20px; margin-bottom: 10px; }
+        .score-item { padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 1rem; color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .bg-score-benar { background-color: #28a745; }
+        .bg-score-salah { background-color: #dc3545; }
 
         .guide-box { height: 60px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; color: white; border-radius: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .target-box { height: 80px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; background: white; border: 3px dashed #ccc; border-radius: 15px; cursor: pointer; transition: 0.3s; color: #aaa; }
@@ -35,20 +41,28 @@
         footer { margin-top: auto; background: #fff; padding: 15px; border-top: 1px solid #ddd; font-weight: bold; color: #555; text-align: center; }
         .correct-pop { animation: pop 0.4s ease-out; border-style: solid !important; }
         @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        
+        #win-counter { font-size: 0.85rem; color: #6c757d; font-weight: bold; margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
 <div id="audio-trigger" onclick="startWithAudio()">
     <h1 style="font-family: 'Fredoka One'; color: #007bff;">KLIK UNTUK MAIN</h1>
-    <p class="text-secondary">Ayo belajar warna!</p>
+    <p class="text-secondary">Dapatkan 3 kemenangan untuk selebrasi!</p>
 </div>
 
 <div class="container py-3 flex-grow-1 text-center" style="max-width: 500px;">
     <h3>🎨 Game Angka & Warna</h3>
+    
+    <div class="score-container">
+        <div class="score-item bg-score-benar">Benar: <span id="skor-benar">0</span></div>
+        <div class="score-item bg-score-salah">Salah: <span id="skor-salah">0</span></div>
+    </div>
+    <div id="win-counter">Ronde Selesai: 0 / 3</div>
 
-    <button class="btn btn-outline-dark rounded-pill px-4 my-3 fw-bold" onclick="resetGame()">
-        🔄 Ulang Manual
+    <button class="btn btn-outline-dark btn-sm rounded-pill px-4 my-2 fw-bold" onclick="resetFull()">
+        🔄 Ulang Skor & Game
     </button>
 
     <span class="section-label">Contoh Pasangan:</span>
@@ -70,16 +84,18 @@
 <script>
     let selectedBoxNum = null;
     let selectedBoxElement = null;
+    let winCount = 0;
+    let scoreBenar = 0;
+    let scoreSalah = 0;
     const numbers = [1, 2, 3, 4, 5];
 
-    // Audio
     const soundStart = new Audio('start.mp3');
     const soundsBenar = [new Audio('benar1.mp3'), new Audio('benar2.mp3'), new Audio('benar3.mp3'), new Audio('benar4.mp3'), new Audio('benar5.mp3')];
     const soundsSalah = [new Audio('salah1.mp3'), new Audio('salah2.mp3'), new Audio('salah3.mp3'), new Audio('salah4.mp3'), new Audio('salah5.mp3')];
 
     function startWithAudio() {
         document.getElementById('audio-trigger').style.display = 'none';
-        soundStart.play(); // Sekarang suara start pasti berbunyi karena dipicu klik
+        soundStart.play();
         resetGame();
     }
 
@@ -88,6 +104,20 @@
         const sound = audioArray[randomIndex];
         sound.currentTime = 0;
         sound.play();
+    }
+
+    function resetFull() {
+        scoreBenar = 0;
+        scoreSalah = 0;
+        winCount = 0;
+        updateScoreDisplay();
+        document.getElementById('win-counter').innerText = `Ronde Selesai: 0 / 3`;
+        resetGame();
+    }
+
+    function updateScoreDisplay() {
+        document.getElementById('skor-benar').innerText = scoreBenar;
+        document.getElementById('skor-salah').innerText = scoreSalah;
     }
 
     function resetGame() {
@@ -126,6 +156,8 @@
         if (selectedBoxNum === null) return;
 
         if (colorClass === "c" + selectedBoxNum) {
+            scoreBenar++; // Tambah Skor Benar
+            updateScoreDisplay();
             playRandomSound(soundsBenar);
             selectedBoxElement.className = "target-box " + colorClass + " correct-pop";
             selectedBoxElement.onclick = null;
@@ -133,6 +165,8 @@
             updateStatus("HEBAT! 🎉", "text-success");
             checkWin();
         } else {
+            scoreSalah++; // Tambah Skor Salah
+            updateScoreDisplay();
             playRandomSound(soundsSalah);
             updateStatus("Coba lagi! ❌", "text-danger");
             selectedBoxElement.animate([{ transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'translateX(0)' }], { duration: 200 });
@@ -142,13 +176,31 @@
     function checkWin() {
         const solved = document.querySelectorAll('.correct-pop').length;
         if (solved === 5) {
-            updateStatus("YAY! KAMU MENANG! 🏆", "text-success");
-            // Otomatis restart setelah 3 detik
+            winCount++;
+            document.getElementById('win-counter').innerText = `Ronde Selesai: ${winCount} / 3`;
+            
+            if (winCount % 3 === 0) {
+                updateStatus("WOW! SELEBRASI BESAR! 🎆", "text-success");
+                launchCelebration();
+            } else {
+                updateStatus("YAY! KAMU MENANG! 🏆", "text-success");
+            }
+
             setTimeout(() => {
                 soundStart.play();
                 resetGame();
-            }, 3000);
+            }, 4000);
         }
+    }
+
+    function launchCelebration() {
+        var duration = 3 * 1000;
+        var end = Date.now() + duration;
+        (function frame() {
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#FF0000', '#FFFF00', '#28a745', '#007bff', '#6f42c1'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#FF0000', '#FFFF00', '#28a745', '#007bff', '#6f42c1'] });
+            if (Date.now() < end) requestAnimationFrame(frame);
+        }());
     }
 
     function updateStatus(text, colorClass) {
